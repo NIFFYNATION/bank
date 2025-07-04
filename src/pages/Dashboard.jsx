@@ -1,11 +1,11 @@
 import React from 'react';
-import DashboardLayout from '../components/dashboard/DashboardLayout';
-
+// import { Button } from '../components/common/Button';
 
 const Dashboard = () => (
-  <DashboardLayout>
-    dddddddddddddddd
-  </DashboardLayout>
+ 
+    
+   <>
+   </>
 );
 
 export default Dashboard;

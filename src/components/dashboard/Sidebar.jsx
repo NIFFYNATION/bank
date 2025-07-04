@@ -56,7 +56,7 @@ function MenuSection({ title, items }) {
               href="#"
               className={`flex items-center gap-3 px-4 py-2 rounded-lg transition-colors ${
                 item.active
-                  ? 'bg-primary-light text-text-grey font-semibold'
+                  ? 'bg-primary hover:bg-primary-light text-text-grey font-semibold'
                   : 'text-text-primary hover:bg-gray-100'
               }`}
             >
@@ -90,8 +90,8 @@ function Sidebar() {
 
   return (
     <aside
-      className={`flex flex-col overflow-y-auto fixed z-100 bg-background sidebar-scrollbar items-center shadow-md py-4 transition-all duration-300 h-screen 
-        ${isCollapsed ? 'w-[79px]' : 'w-[249px]'}`}
+      className={`flex flex-col overflow-y-auto overflow-x-hidden fixed z-100 bg-background sidebar-scrollbar items-center shadow-md py-4  transition-all duration-300 h-screen 
+        ${isCollapsed ? 'w-[80px]' : 'w-[249px]'}`}
      
     >
       {/* Logo and Close Button */}
