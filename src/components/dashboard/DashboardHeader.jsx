@@ -17,14 +17,14 @@ function DashboardHeader() {
     <header
       className={` border-b border-quaternary md:border-[#D9D9D9] fixed top-0 right-0 ${
         isCollapsed ? 'left-0 lg:left-[80px]' : 'left-0 lg:left-[250px]'
-      } h-[80px] bg-white z-20 transition-all duration-300 flex items-center px-6 shadow-sm`}
+      } h-[80px] bg-white z-20 transition-all justify-between duration-300 flex items-center px-6 shadow-sm`}
       style={{ minHeight: 80 }}
     >
       {/* Hamburger button when sidebar is collapsed */}
       {isCollapsed && (
         <button
           onClick={toggleSidebar}
-          className="mr-4 p-2 rounded hover:bg-gray-100 transition"
+          className="ml-0 md:ml-16 lg:ml-4 p-2  rounded hover:bg-gray-100 transition"
           aria-label="Open sidebar"
         >
           {/* Hamburger icon SVG */}
