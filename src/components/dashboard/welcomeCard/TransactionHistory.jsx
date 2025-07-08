@@ -64,9 +64,9 @@ const transactions = [
   },
   {
     id: 'KMN-072309',
-    name: 'Monica',
+    name: 'Euphemia Kelson ',
     date: 'Jan 29, 2023',
-    description: 'Utility Bill Payment',
+    description: 'You sent total amount of 300.00 to Euphemia Kelson (7193182024)',
     type: 'Debit',
     amount: 300,
     channel: 'Local Transfer',
@@ -137,12 +137,12 @@ export default function TransactionHistory({ months = months, selectedMonth = mo
             ) : (
               filteredTransactions.map(tx => (
                 <tr key={tx.id} className="border-t last:border-b-0 border-gray-100">
-                  <td className="py-3">{formatDate(tx.date)}</td>
-                  <td className="py-3">{tx.id}</td>
-                  <td className="py-3">{tx.name}</td>
-                  <td className="py-3">{tx.description}</td>
-                  <td className="py-3"><ChannelBadge channel={tx.channel} /></td>
-                  <td className="py-3">
+                  <td className="py-3 px-1">{formatDate(tx.date)}</td>
+                  <td className="py-3 px-1">{tx.id}</td>
+                  <td className="py-3 px-1">{tx.name}</td>
+                  <td className="py-3 px-1">{tx.description}</td>
+                  <td className="py-3 px-1"><ChannelBadge channel={tx.channel} /></td>
+                  <td className="py-3 px-1">
                     <span className={`inline-block px-3 py-1 rounded-full border text-xs font-semibold ${tx.type === 'Credit' ? 'bg-green-50 text-green-600 border-green-200' : 'bg-red-50 text-red-500 border-red-200'}`}>{tx.type}</span>
                   </td>
                   <td className={`py-3 text-right font-semibold ${tx.type === 'Credit' ? 'text-green-600' : 'text-red-500'}`}>{formatAmount(tx.amount, tx.type)}</td>

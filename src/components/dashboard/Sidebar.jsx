@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useSidebar } from '../../contexts/SidebarContext'
 import '../../styles/scrollbar.css'; // Import the global scrollbar CSS
-
+import { Link, NavLink } from 'react-router-dom';
 
 const user = {
   name: 'real real',
@@ -11,35 +11,34 @@ const user = {
 };
 
 const menuSections = [
-  
   {
     title: 'MAIN MENU',
     items: [
-      { label: 'Dashboard', icon: '/icons/dashboard.svg', active: true },
-      { label: 'Transactions', icon: '/icons/transactions.svg' },
-      { label: 'Cards', icon: '/icons/cards.svg' },
+      { label: 'Dashboard', icon: '/icons/dashboard.svg', to: "/dashboard" },
+      { label: 'Transactions', icon: '/icons/transactions.svg', to: "/dashboard/transactionspage" },
+      { label: 'Cards', icon: '/icons/cards.svg', to: "/dashboard/cards" },
     ],
   },
   {
     title: 'TRANSFERS',
     items: [
-      { label: 'Local Transfer', icon: '/icons/local-transfer.svg' },
-      { label: 'International Wire', icon: '/icons/international-wire.svg' },
-      { label: 'Deposit', icon: '/icons/deposit.svg' },
+      { label: 'Local Transfer', icon: '/icons/local-transfer.svg', to: "/dashboard/local-transfer" },
+      { label: 'International Wire', icon: '/icons/international-wire.svg', to: "/dashboard/international-wire" },
+      { label: 'Deposit', icon: '/icons/deposit.svg', to: "/dashboard/deposit" },
     ],
   },
   {
     title: 'SERVICES',
     items: [
-      { label: 'Loan Request', icon: '/icons/loan.svg' },
-      { label: 'IRS Tax Refund', icon: '/icons/tax.svg' },
-      { label: 'Loan History', icon: '/icons/history.svg' },
+      { label: 'Loan Request', icon: '/icons/loan.svg', to: "/dashboard/loan-request" },
+      { label: 'IRS Tax Refund', icon: '/icons/tax.svg', to: "/dashboard/tax-refund" },
+      { label: 'Loan History', icon: '/icons/history.svg', to: "/dashboard/loan-history" },
     ],
   },
   {
     title: 'ACCOUNT',
     items: [
-      { label: 'Settings', icon: '/icons/settings.svg' },
+      { label: 'Settings', icon: '/icons/settings.svg', to: "/dashboard/settings" },
     ],
   },
 ];
@@ -52,17 +51,27 @@ function MenuSection({ title, items }) {
       <ul>
         {items.map((item) => (
           <li key={item.label} className={`py-2 ${isCollapsed ? 'justify-center' : ''}`}>
-            <a
-              href="#"
-              className={`flex items-center gap-3 px-4 py-2 rounded-lg transition-colors ${
-                item.active
-                  ? 'bg-primary hover:bg-primary-light text-text-grey font-semibold'
-                  : 'text-text-primary hover:bg-gray-100'
-              }`}
-            >
-              <img src={item.icon} alt="" className="w-6 h-6" />
-              {!isCollapsed && <span className='font-semibold'>{item.label}</span>}
-            </a>
+            {item.to ? (
+              <NavLink
+                to={item.to}
+                className={({ isActive }) =>
+                  `flex items-center gap-3 px-4 py-2 rounded-lg transition-colors ${
+                    isActive
+                      ? 'bg-primary hover:bg-primary-light text-text-grey font-semibold'
+                      : 'text-text-primary hover:bg-gray-100'
+                  }`
+                }
+                end
+              >
+                <img src={item.icon} alt="" className="w-6 h-6" />
+                {!isCollapsed && <span className='font-semibold'>{item.label}</span>}
+              </NavLink>
+            ) : (
+              <div className={`flex items-center gap-3 px-4 py-2 rounded-lg text-text-primary`}>
+                <img src={item.icon} alt="" className="w-6 h-6" />
+                {!isCollapsed && <span className='font-semibold'>{item.label}</span>}
+              </div>
+            )}
           </li>
         ))}
       </ul>
@@ -92,7 +101,6 @@ function Sidebar() {
     <aside
       className={`flex flex-col overflow-y-auto overflow-x-hidden fixed z-100 bg-background sidebar-scrollbar items-center shadow-md py-4  transition-all duration-300 h-screen 
         ${isCollapsed ? 'w-[80px]' : 'w-[249px]'}`}
-     
     >
       {/* Logo and Close Button */}
       <div className="mb-6 flex items-center justify-between w-full px-4">
@@ -102,7 +110,6 @@ function Sidebar() {
           <button
             onClick={toggleSidebar}
             className="ml-auto p-2 rounded transition bg-background-alt text-primary"
-            
             aria-label="Close sidebar"
           >
             {/* X icon SVG */}
