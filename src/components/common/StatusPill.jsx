@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function StatusPill({ status }) {
   const color =
-    status === 'Completed'
+    status === 'Credit'
       ? 'bg-green-50 text-green-600 border-green-200'
       : 'bg-red-50 text-red-500 border-red-200';
   return (

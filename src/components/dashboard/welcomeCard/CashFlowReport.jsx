@@ -2,6 +2,7 @@
 import React from "react";
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  Cell,
 } from "recharts";
 import Dropdown from "../../common/Dropdown";
 
@@ -32,13 +33,19 @@ function CustomTooltip({ active, payload, label }) {
   return null;
 }
 
-export default function CashFlowReport() {
+export default function CashFlowReport({ months, selectedMonth, onMonthChange }) {
+  // Find the selected month index for highlighting
+  const selectedIndex = months.indexOf(selectedMonth);
+
   return (
     <div className="bg-white rounded-xl p-6 shadow flex flex-col gap-4">
       <div className="flex justify-between items-center mb-2">
         <h2 className="font-semibold text-lg">Cash Flow Report</h2>
-        <Dropdown options={['Monthly']} value="Monthly" />
-        
+        <Dropdown
+          options={months}
+          value={selectedMonth}
+          onChange={e => onMonthChange(e.target.value)}
+        />
       </div>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data} barSize={32}>
@@ -55,7 +62,17 @@ export default function CashFlowReport() {
             dataKey="value"
             radius={[8, 8, 0, 0]}
             fill="url(#colorUv)"
-          />
+          >
+            {
+              data.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={index === selectedIndex ? "#2563eb" : "url(#colorUv)"}
+                  opacity={index === selectedIndex ? 1 : 0.8}
+                />
+              ))
+            }
+          </Bar>
           <defs>
             <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#93c5fd" stopOpacity={0.5} />

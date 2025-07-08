@@ -6,6 +6,8 @@ import {
   DocumentTextIcon,
 } from '@heroicons/react/24/outline';
 
+
+
 export default function DashboardActions() {
   const actions = [
     { label: 'Account Info', icon: <UserCircleIcon className="w-7 h-7 text-color-primary" /> },
@@ -19,13 +21,15 @@ export default function DashboardActions() {
       <div className="mb-2 font-bold text-text-primary">What would you like to do today?</div>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {actions.map((action) => (
-          <button
+         
+            <button
             key={action.label}
             className="flex flex-col items-center justify-center gap-2 rounded-xl p-4 py-6 md:py-17 bg-background shadow text-primary hover:text-background hover:bg-primary transition"
           >
             {action.icon}
             {action.label}
           </button>
+         
         ))}
       </div>
     </div>

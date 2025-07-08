@@ -8,7 +8,14 @@ import DashboardQuickTransfer from '../components/dashboard/welcomeCard/Dashboar
 import TransactionHistory from '../components/dashboard/welcomeCard/TransactionHistory';
 import CashFlowReport from '../components/dashboard/welcomeCard/CashFlowReport';
 
+const months = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December"
+];
+
 export default function DashboardPage() {
+  const [selectedMonth, setSelectedMonth] = React.useState(months[0]);
+
   return (
     <DashboardDataProvider>
       <div className="flex flex-col gap-6 p-4 md:p-8">
@@ -30,10 +37,17 @@ export default function DashboardPage() {
           </div>
         </div>
         <div className="w-full mx-auto flex flex-col gap-8">
-        <CashFlowReport />
-
-      <TransactionHistory />
-    </div>
+          <CashFlowReport
+            months={months}
+            selectedMonth={selectedMonth}
+            onMonthChange={setSelectedMonth}
+          />
+          <TransactionHistory
+            months={months}
+            selectedMonth={selectedMonth}
+            onMonthChange={setSelectedMonth}
+          />
+        </div>
       </div>
     </DashboardDataProvider>
   );

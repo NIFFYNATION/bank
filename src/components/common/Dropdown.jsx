@@ -9,7 +9,7 @@ export default function Dropdown({ options, value, onChange }) {
       style={{ minWidth: 90 }}
     >
       {options.map(opt => (
-        <option key={opt} value={opt}>{opt}</option>
+        <option className='' key={opt} value={opt}>{opt}</option>
       ))}
     </select>
   );
