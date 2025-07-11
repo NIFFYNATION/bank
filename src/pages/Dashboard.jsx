@@ -5,7 +5,7 @@ import DashboardMainCard from '../components/dashboard/welcomeCard/DashboardMain
 import DashboardAccountStats from '../components/dashboard/welcomeCard/DashboardAccountStats';
 import DashboardActions from '../components/dashboard/welcomeCard/DashboardActions';
 import DashboardQuickTransfer from '../components/dashboard/welcomeCard/DashboardQuickTransfer';
-import TransactionHistory from '../components/dashboard/welcomeCard/TransactionHistory';
+import TransactionHistory from '../components/dashboard/transactions/TransactionHistory';
 import CashFlowReport from '../components/dashboard/welcomeCard/CashFlowReport';
 
 const months = [

@@ -136,16 +136,16 @@ export default function TransactionHistory({ months = months, selectedMonth = mo
               </tr>
             ) : (
               filteredTransactions.map(tx => (
-                <tr key={tx.id} className="border-t last:border-b-0 border-gray-100">
-                  <td className="py-3 px-1">{formatDate(tx.date)}</td>
-                  <td className="py-3 px-1">{tx.id}</td>
-                  <td className="py-3 px-1">{tx.name}</td>
-                  <td className="py-3 px-1">{tx.description}</td>
-                  <td className="py-3 px-1"><ChannelBadge channel={tx.channel} /></td>
-                  <td className="py-3 px-1">
-                    <span className={`inline-block px-3 py-1 rounded-full border text-xs font-semibold ${tx.type === 'Credit' ? 'bg-green-50 text-green-600 border-green-200' : 'bg-red-50 text-red-500 border-red-200'}`}>{tx.type}</span>
+                <tr key={tx.id} className="border-t last:border-b-0 border-gray-100 hover:bg-gray-50 transition-colors duration-150">
+                  <td className="py-4 px-2 text-gray-600">{formatDate(tx.date)}</td>
+                  <td className="py-4 px-2 font-mono text-sm text-gray-500">{tx.id}</td>
+                  <td className="py-4 px-2 font-medium text-gray-900">{tx.name}</td>
+                  <td className="py-4 px-2 text-gray-600">{tx.description}</td>
+                  <td className="py-4 px-2"><ChannelBadge channel={tx.channel} /></td>
+                  <td className="py-4 px-2">
+                    <span className={`inline-block px-3 py-1.5 rounded-full border text-xs font-semibold shadow-sm ${tx.type === 'Credit' ? 'bg-green-50 text-green-600 border-green-200' : 'bg-red-50 text-red-500 border-red-200'}`}>{tx.type}</span>
                   </td>
-                  <td className={`py-3 text-right font-semibold ${tx.type === 'Credit' ? 'text-green-600' : 'text-red-500'}`}>{formatAmount(tx.amount, tx.type)}</td>
+                  <td className={`py-4 px-2 text-right font-semibold ${tx.type === 'Credit' ? 'text-green-600' : 'text-red-500'}`}>{formatAmount(tx.amount, tx.type)}</td>
                 </tr>
               ))
             )}

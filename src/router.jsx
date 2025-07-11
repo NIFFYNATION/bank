@@ -5,6 +5,8 @@ import Dashboard from './pages/Dashboard';
 import Homepage from './pages/Homepage';
 import DashboardLayout from './components/dashboard/DashboardLayout';
 import TransactionsPage from './components/dashboard/transactions/TransactionsPage';
+import Cards from './components/dashboard/cards/cards';
+
 
 
 export const router = createBrowserRouter([
@@ -28,6 +30,8 @@ export const router = createBrowserRouter([
         children: [
           { path: '', element: <Dashboard /> },
           { path: 'transactionspage', element: <TransactionsPage /> },
+          { path: 'cards', element: <Cards /> },
+
         
         ],
       },

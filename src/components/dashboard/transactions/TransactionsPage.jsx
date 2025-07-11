@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from '../../common/Button'
-import TransactionHistory from '../welcomeCard/TransactionHistory'
+import TransactionHistory from './TransactionHistory'
 import DashboardSummaryCards from '../welcomeCard/DashboardSummaryCards';
 
 const months = [
