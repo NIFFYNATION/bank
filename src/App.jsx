@@ -16,11 +16,9 @@ function App() {
 
             <Outlet />
             {/* Mobile Tab Navigation */}
-            <div className="md:hidden pt-32">
-              
+            <div className="md:hidden pt-32">      
             </div>
           </div>
   )
 }
-
 export default App

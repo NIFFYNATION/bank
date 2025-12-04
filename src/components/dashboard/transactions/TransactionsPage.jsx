@@ -20,10 +20,10 @@ function TransactionsPage() {
         {/* Breadcrumbs and Title */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Transactions</h1>
             <div className="text-xs text-gray-400 font-medium mb-1">
               Dashboard <span className="mx-1">&gt;</span> <span className="text-gray-700">Transactions</span>
             </div>
+            <h1 className="text-2xl font-bold text-gray-900">Transactions</h1>
           </div>
           <div className="flex gap-2 mt-2 sm:mt-0">
             <Button variant='outline' size='md' shape='roundedMd' >
