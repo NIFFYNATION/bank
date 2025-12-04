@@ -31,7 +31,7 @@ const menuSections = [
     title: 'SERVICES',
     items: [
       { label: 'Loan Request', icon: '/icons/loan.svg', to: "/dashboard/loan-request" },
-      { label: 'IRS Tax Refund', icon: '/icons/tax.svg', to: "/dashboard/tax-refund" },
+      { label: 'IRS Tax Refund', icon: '/icons/tax.svg', to: "/dashboard/irs-tax-refund" },
       { label: 'Loan History', icon: '/icons/history.svg', to: "/dashboard/loan-history" },
     ],
   },
