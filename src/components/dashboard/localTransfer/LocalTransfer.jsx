@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useBankStore } from '../../../store/useBankStore';
 import {
   BuildingLibraryIcon,
   UserIcon,
@@ -8,6 +9,7 @@ import {
   ArrowUpRightIcon,
   ClockIcon,
   ShieldCheckIcon,
+  XMarkIcon,
 } from '@heroicons/react/24/outline';
 
 const banks = [
@@ -25,6 +27,10 @@ const beneficiaries = [
 ];
 
 export default function LocalTransfer() {
+  const { sendMoney } = useBankStore();
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [lastTx, setLastTx] = useState(null);
+
   const [form, setForm] = useState({
     recipientName: '',
     bank: banks[0],
@@ -68,8 +74,50 @@ export default function LocalTransfer() {
     }));
   };
 
+  const handleSend = () => {
+    try {
+      if (!canSubmit) return;
+
+      const amountNum = parseFloat(form.amount);
+      
+      // Execute transaction
+      sendMoney({
+        to: form.recipientName,
+        amount: amountNum,
+        description: form.description || 'Local Transfer',
+        channel: 'Local Transfer' // Could be dynamic based on transferType
+      });
+
+      // Store details for modal
+      setLastTx({
+        amount: amountNum,
+        recipient: form.recipientName,
+        bank: form.bank
+      });
+
+      // Show success modal
+      setShowSuccess(true);
+
+      // Reset form
+      setForm({
+        recipientName: '',
+        bank: banks[0],
+        accountNumber: '',
+        amount: '',
+        description: '',
+        schedule: false,
+        transferType: 'Interbank'
+      });
+
+    } catch (error) {
+      console.error(error);
+      // In a real app, show error notification
+      alert(error.message || "Transaction failed");
+    }
+  };
+
   return (
-    <div className="space-y-8 mt-10">
+    <div className="space-y-8 mt-10 relative">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Local Transfer</h1>
@@ -199,6 +247,7 @@ export default function LocalTransfer() {
               Reset
             </button>
             <button
+              onClick={handleSend}
               disabled={!canSubmit}
               className={`px-5 py-2 rounded-lg text-white transition-colors ${canSubmit ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-gray-300 cursor-not-allowed'}`}
             >
@@ -247,7 +296,53 @@ export default function LocalTransfer() {
           </div>
         </motion.div>
       </div>
+
+      {/* Success Modal */}
+      <AnimatePresence>
+        {showSuccess && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden"
+            >
+              <div className="p-6 text-center">
+                <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-6">
+                  <CheckBadgeIcon className="h-10 w-10 text-green-600" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">Transfer Successful!</h3>
+                <p className="text-gray-500 mb-6">
+                  You have successfully sent <span className="font-semibold text-gray-900">${lastTx?.amount?.toLocaleString()}</span> to <span className="font-semibold text-gray-900">{lastTx?.recipient}</span>.
+                </p>
+                
+                <div className="bg-gray-50 rounded-xl p-4 mb-6 text-left">
+                  <div className="flex justify-between mb-2 text-sm">
+                    <span className="text-gray-500">Bank</span>
+                    <span className="font-medium text-gray-900">{lastTx?.bank}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-500">Date</span>
+                    <span className="font-medium text-gray-900">{new Date().toLocaleDateString()}</span>
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setShowSuccess(false)}
+                  className="w-full inline-flex justify-center items-center px-4 py-3 border border-transparent text-base font-medium rounded-xl shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+                >
+                  Done
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
-
