@@ -5,30 +5,30 @@ import {
   CreditCardIcon,
   ArrowPathIcon,
 } from '@heroicons/react/24/outline';
-import { useDashboardData } from '../../../contexts/DashboardDataContext';
+import { useBankStore, formatCurrency } from '../../../store/useBankStore';
 
 export default function DashboardSummaryCards() {
-  const { currentBalance, monthlyIncome, monthlyOutgoing, transactionLimit } = useDashboardData();
+  const { currentBalance, monthlyIncome, monthlyOutgoing, transactionLimit } = useBankStore();
 
   const summaryCards = [
     {
       label: 'Current Balance',
-      value: currentBalance,
+      value: formatCurrency(currentBalance),
       icon: <CreditCardIcon className="w-6 h-6 text-primary" />,
     },
     {
       label: 'Monthly Income',
-      value: monthlyIncome,
+      value: formatCurrency(monthlyIncome),
       icon: <ArrowTrendingUpIcon className="w-6 h-6 text-green-500" />,
     },
     {
       label: 'Monthly Outgoing',
-      value: monthlyOutgoing,
+      value: formatCurrency(monthlyOutgoing),
       icon: <ArrowTrendingDownIcon className="w-6 h-6 text-red-500" />,
     },
     {
       label: 'Transaction Limit',
-      value: transactionLimit,
+      value: formatCurrency(transactionLimit),
       icon: <ArrowPathIcon className="w-6 h-6 text-purple-500" />,
     },
   ];

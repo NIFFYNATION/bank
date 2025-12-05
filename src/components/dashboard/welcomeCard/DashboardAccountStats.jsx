@@ -5,7 +5,7 @@ import {
   ArrowDownLeftIcon,
   UserCircleIcon,
 } from '@heroicons/react/24/outline';
-import { useDashboardData } from '../../../contexts/DashboardDataContext';
+import { useBankStore, formatCurrency } from '../../../store/useBankStore';
 
 
 export default function DashboardAccountStats() {
@@ -14,12 +14,12 @@ export default function DashboardAccountStats() {
     pendingTransactions,
     transactionVolume,
     accountAge,
-  } = useDashboardData();
+  } = useBankStore();
 
   const accountStats = [
-    { label: 'Transaction Limit', value: transactionLimit, icon: <ArrowPathIcon className="w-5 h-5 text-purple-500" /> },
-    { label: 'Pending Transactions', value: pendingTransactions, icon: <ArrowUpRightIcon className="w-5 h-5 text-yellow-500" /> },
-    { label: 'Transaction Volume', value: transactionVolume, icon: <ArrowDownLeftIcon className="w-5 h-5 text-green-500" /> },
+    { label: 'Transaction Limit', value: formatCurrency(transactionLimit), icon: <ArrowPathIcon className="w-5 h-5 text-purple-500" /> },
+    { label: 'Pending Transactions', value: formatCurrency(pendingTransactions), icon: <ArrowUpRightIcon className="w-5 h-5 text-yellow-500" /> },
+    { label: 'Transaction Volume', value: formatCurrency(transactionVolume), icon: <ArrowDownLeftIcon className="w-5 h-5 text-green-500" /> },
     { label: 'Account Age', value: accountAge, icon: <UserCircleIcon className="w-5 h-5 text-blue-500" /> },
   ];
 

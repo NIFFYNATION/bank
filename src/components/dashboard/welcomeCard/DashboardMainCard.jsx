@@ -5,10 +5,10 @@ import {
   ArrowPathIcon,
   ArrowUpRightIcon,
 } from '@heroicons/react/24/outline';
-import { useDashboardData } from '../../../contexts/DashboardDataContext';
+import { useBankStore, formatCurrency } from '../../../store/useBankStore';
 
 export default function DashboardMainCard() {
-  const { currentBalance, accountNumber, accountStatus, userName } = useDashboardData();
+  const { currentBalance, accountNumber, accountStatus, userName } = useBankStore();
   const navigate = useNavigate();
 
   // Get today's date in a readable format
@@ -37,7 +37,7 @@ export default function DashboardMainCard() {
         <div className="text-xs opacity-80">{dateString}</div>
       </div>
       <div className="text-sm opacity-80">Available Balance</div>
-      <div className="text-3xl font-bold">{currentBalance}</div>
+      <div className="text-3xl font-bold">{formatCurrency(currentBalance)}</div>
       <div className='flex flex-col md:flex-row justify-between'>
         <div>
           <div className="flex items-center gap-2 text-xs">
@@ -69,3 +69,4 @@ export default function DashboardMainCard() {
     </div>
   );
 }
+

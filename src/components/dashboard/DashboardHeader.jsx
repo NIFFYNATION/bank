@@ -1,11 +1,11 @@
 import React from 'react';
 import { useSidebar } from '../../contexts/SidebarContext';
-import { useDashboardData } from '../../contexts/DashboardDataContext';
+import { useBankStore, formatCurrency } from '../../store/useBankStore';
 import { BellIcon, UserCircleIcon } from '@heroicons/react/24/outline';
 
 function DashboardHeader() {
   const { isCollapsed, toggleSidebar } = useSidebar();
-  const { currentBalance, userName } = useDashboardData();
+  const { currentBalance, userName } = useBankStore();
 
   // Get today's date in a readable format
   const today = new Date();
@@ -47,7 +47,7 @@ function DashboardHeader() {
         {/* Balance */}
         <div className="flex items-center gap-2 bg-background-alt px-4 py-2 rounded-lg shadow-sm">
           <span className="text-text-secondary text-xs">Balance:</span>
-          <span className="font-bold text-primary">{currentBalance}</span>
+          <span className="font-bold text-primary">{formatCurrency(currentBalance)}</span>
         </div>
 
         {/* Notification bell */}

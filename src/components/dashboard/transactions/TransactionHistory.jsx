@@ -2,77 +2,14 @@ import React from 'react';
 import Dropdown from "../../common/Dropdown";
 import {Button} from "../../common/Button";
 import { Link } from 'react-router-dom';
+import { useBankStore } from '../../../store/useBankStore';
 
 const months = [
   "January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
 
-const transactions = [
-  {
-    id: 'QWE-231213',
-    name: 'Anastasia',
-    date: 'Sep 29, 2023',
-    description: 'Salary Credit',
-    type: 'Credit',
-    amount: 12200,
-    channel: 'Local Transfer',
-  },
-  {
-    id: 'ZXC-072349',
-    name: 'Anastasia',
-    date: 'Sep 29, 2023',
-    description: 'Salary Credit',
-    type: 'Debit',
-    amount: 12200,
-    channel: 'International Wire',
-  },
-  {
-    id: 'ADC-076223',
-    name: 'Anastasia',
-    date: 'Jan 29, 2023',
-    description: 'Payment received from Anastasia Clement',
-    type: 'Credit',
-    amount: 12200,
-    channel: 'International Wire',
-  },
-  {
-    id: 'ASD-076233',
-    name: 'Mathew',
-    date: 'Sep 29, 2023',
-    description: 'ATM Withdrawal',
-    type: 'Debit',
-    amount: 200,
-    channel: 'Local Transfer',
-  },
-  {
-    id: 'RRE-076213',
-    name: 'John',
-    date: 'Jan 29, 2023',
-    description: 'Online Shopping',
-    type: 'Debit',
-    amount: 1500,
-    channel: 'International Wire',
-  },
-  {
-    id: 'DEW-076213',
-    name: 'Daniel',
-    date: 'Jan 29, 2023',
-    description: 'Interest Credit',
-    type: 'Credit',
-    amount: 50,
-    channel: 'International Wire',
-  },
-  {
-    id: 'KMN-072309',
-    name: 'Euphemia Kelson ',
-    date: 'Jan 29, 2023',
-    description: 'You sent total amount of 300.00 to Euphemia Kelson (7193182024)',
-    type: 'Debit',
-    amount: 300,
-    channel: 'Local Transfer',
-  },
-];
+// Removed static transactions array
 
 function formatDate(dateStr) {
   const date = new Date(dateStr);
@@ -80,7 +17,7 @@ function formatDate(dateStr) {
 }
 
 function formatAmount(amount, type) {
-  return `${type === 'Debit' ? '-' : '+'}$${amount.toLocaleString()}`;
+  return `${type === 'Debit' ? '-' : '+'}$${amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
 function ChannelBadge({ channel }) {
@@ -90,7 +27,13 @@ function ChannelBadge({ channel }) {
     icon = '🏦'; color = 'bg-blue-50 text-blue-600 border-blue-200';
   } else if (channel === 'International Wire') {
     icon = '🌐'; color = 'bg-purple-50 text-purple-600 border-purple-200';
-  } 
+  } else if (channel === 'Card') {
+    icon = '💳'; color = 'bg-orange-50 text-orange-600 border-orange-200';
+  } else if (channel === 'Deposit') {
+    icon = '💰'; color = 'bg-green-50 text-green-600 border-green-200';
+  } else {
+    icon = '📄'; color = 'bg-gray-50 text-gray-600 border-gray-200';
+  }
   return (
     <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full border text-xs font-medium ${color}`}>
       <span>{icon}</span> {channel}
@@ -99,9 +42,12 @@ function ChannelBadge({ channel }) {
 }
 
 export default function TransactionHistory({ months = months, selectedMonth = months[0], onMonthChange }) {
+  const { transactions } = useBankStore();
+
   // Filter transactions by selected month
   const filteredTransactions = transactions.filter(tx => {
-    const txMonth = months[new Date(tx.date).getMonth()];
+    const txDate = new Date(tx.date);
+    const txMonth = months[txDate.getMonth()];
     return txMonth === selectedMonth;
   });
 

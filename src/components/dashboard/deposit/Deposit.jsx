@@ -3,21 +3,28 @@ import { BanknotesIcon, CurrencyDollarIcon, CalendarDaysIcon } from '@heroicons/
 import SectionCard from '../../common/SectionCard';
 import LabeledField from '../../common/LabeledField';
 import SummaryCard from '../../common/SummaryCard';
+import { useBankStore } from '../../../store/useBankStore';
+import { motion } from 'framer-motion';
 
 export default function Deposit() {
+  const { depositMoney } = useBankStore();
+  const [status, setStatus] = useState({ type: '', message: '' });
   const [form, setForm] = useState({
     amount: '',
     account: '',
-    method: '',
+    method: 'electronic',
     reference: '',
     date: '',
   });
 
-  const update = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const update = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+    if (status.message) setStatus({ type: '', message: '' });
+  };
 
   const valid = useMemo(() => {
     const amt = parseFloat(form.amount || '0');
-    return amt > 0 && form.account && form.method;
+    return amt > 0 && form.account;
   }, [form]);
 
   const summary = useMemo(() => {
@@ -25,14 +32,49 @@ export default function Deposit() {
     const fee = 0;
     const net = amt - fee;
     return [
-      { label: 'Amount', value: amt ? `$${amt.toFixed(2)}` : '-' },
+      { label: 'Amount', value: amt ? `$${amt.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}` : '-' },
       { label: 'Fee', value: `$${fee.toFixed(2)}` },
-      { label: 'Net Deposit', value: amt ? `$${net.toFixed(2)}` : '-' , accent: true},
+      { label: 'Net Deposit', value: amt ? `$${net.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}` : '-' , accent: true},
     ];
   }, [form]);
 
+  const handleSubmit = () => {
+    if (!valid) return;
+    
+    const result = depositMoney({
+      amount: parseFloat(form.amount),
+      description: form.reference || `Deposit via ${form.method}`,
+      method: form.method,
+      account: form.account,
+      date: form.date
+    });
+
+    if (result.success) {
+      setStatus({ type: 'success', message: 'Deposit successful! Funds have been added to your account.' });
+      setForm({
+        amount: '',
+        account: '',
+        method: 'electronic',
+        reference: '',
+        date: '',
+      });
+    } else {
+      setStatus({ type: 'error', message: result.error });
+    }
+  };
+
   return (
     <div className="space-y-8">
+      {status.message && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className={`p-4 rounded-xl border ${status.type === 'error' ? 'bg-red-50 border-red-200 text-red-700' : 'bg-green-50 border-green-200 text-green-700'}`}
+        >
+          {status.message}
+        </motion.div>
+      )}
+
       <SectionCard
         title="Deposit Funds"
         subtitle="Add money to your account quickly and securely"
@@ -54,6 +96,7 @@ export default function Deposit() {
           <button
             className={`inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold text-white ${valid ? 'bg-indigo-600 hover:bg-indigo-700' : 'bg-gray-300 cursor-not-allowed'}`}
             disabled={!valid}
+            onClick={handleSubmit}
           >
             <CurrencyDollarIcon className="w-4 h-4" />
             Submit Deposit
@@ -69,4 +112,3 @@ export default function Deposit() {
     </div>
   );
 }
-
