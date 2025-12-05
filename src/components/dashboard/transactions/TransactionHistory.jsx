@@ -1,6 +1,7 @@
 import React from 'react';
 import Dropdown from "../../common/Dropdown";
 import {Button} from "../../common/Button";
+import { Link } from 'react-router-dom';
 
 const months = [
   "January", "February", "March", "April", "May", "June",
@@ -33,7 +34,7 @@ const transactions = [
     description: 'Payment received from Anastasia Clement',
     type: 'Credit',
     amount: 12200,
-    channel: 'Crypto',
+    channel: 'International Wire',
   },
   {
     id: 'ASD-076233',
@@ -51,7 +52,7 @@ const transactions = [
     description: 'Online Shopping',
     type: 'Debit',
     amount: 1500,
-    channel: 'Crypto',
+    channel: 'International Wire',
   },
   {
     id: 'DEW-076213',
@@ -89,9 +90,7 @@ function ChannelBadge({ channel }) {
     icon = '🏦'; color = 'bg-blue-50 text-blue-600 border-blue-200';
   } else if (channel === 'International Wire') {
     icon = '🌐'; color = 'bg-purple-50 text-purple-600 border-purple-200';
-  } else if (channel === 'Crypto') {
-    icon = '₿'; color = 'bg-yellow-50 text-yellow-600 border-yellow-200';
-  }
+  } 
   return (
     <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full border text-xs font-medium ${color}`}>
       <span>{icon}</span> {channel}
@@ -109,7 +108,7 @@ export default function TransactionHistory({ months = months, selectedMonth = mo
   return (
     <div className="bg-white rounded-2xl shadow p-6">
       <div className='flex justify-end pb-6'>
-      <Button className='' variant="primary" >View All Transactions</Button>
+      <Link to='/dashboard/transactionspage' className='bg-primary-light rounded-lg py-3 px-4 text-background' variant="primary" >View All Transactions</Link>
 
       </div>
       <div className="flex justify-between items-center mb-4">

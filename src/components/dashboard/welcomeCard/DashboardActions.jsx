@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   UserCircleIcon,
   BanknotesIcon,
@@ -9,11 +10,12 @@ import {
 
 
 export default function DashboardActions() {
+  const navigate = useNavigate();
   const actions = [
-    { label: 'Account Info', icon: <UserCircleIcon className="w-7 h-7 text-color-primary" /> },
-    { label: 'Send Money', icon: <BanknotesIcon className="w-7 h-7 text-green-500" /> },
-    { label: 'Deposit', icon: <ArrowTrendingUpIcon className="w-7 h-7 text-blue-500" /> },
-    { label: 'History', icon: <DocumentTextIcon className="w-7 h-7 text-purple-500" /> },
+    { label: 'Account Info', icon: <UserCircleIcon className="w-7 h-7 text-color-primary" />, route: '/dashboard/settings' },
+    { label: 'Send Money', icon: <BanknotesIcon className="w-7 h-7 text-green-500" />, route: '/dashboard/local-transfer' },
+    { label: 'Deposit', icon: <ArrowTrendingUpIcon className="w-7 h-7 text-blue-500" />, route: '/dashboard/deposit' },
+    { label: 'History', icon: <DocumentTextIcon className="w-7 h-7 text-purple-500" />, route: '/dashboard/transactionspage' },
   ];
 
   return (
@@ -25,6 +27,7 @@ export default function DashboardActions() {
             <button
             key={action.label}
             className="flex flex-col items-center justify-center gap-2 rounded-xl p-4 py-6 md:py-17 bg-background shadow text-primary hover:text-background hover:bg-primary transition"
+            onClick={() => navigate(action.route)}
           >
             {action.icon}
             {action.label}

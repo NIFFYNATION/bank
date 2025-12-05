@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   UserCircleIcon,
   ArrowPathIcon,
@@ -8,6 +9,7 @@ import { useDashboardData } from '../../../contexts/DashboardDataContext';
 
 export default function DashboardMainCard() {
   const { currentBalance, accountNumber, accountStatus, userName } = useDashboardData();
+  const navigate = useNavigate();
 
   // Get today's date in a readable format
   const today = new Date();
@@ -48,6 +50,7 @@ export default function DashboardMainCard() {
           <div className="flex gap-2">
             <button
               className="flex items-center gap-1 px-4 py-2 rounded bg-white text-primary font-semibold shadow hover:bg-primary-light hover:text-white transition"
+              onClick={() => navigate('/dashboard/transactionspage')}
             >
               <ArrowPathIcon className="w-5 h-5" />
               Transactions
@@ -55,6 +58,7 @@ export default function DashboardMainCard() {
             <button
               className="flex items-center gap-1 px-4 py-2 rounded bg-white text-primary font-semibold shadow hover:bg-primary-light hover:text-white transition"
               style={{ border: 'none' }}
+              onClick={() => navigate('/dashboard/deposit')}
             >
               <ArrowUpRightIcon className="w-5 h-5" />
               Top up
