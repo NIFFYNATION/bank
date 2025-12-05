@@ -2,14 +2,11 @@ import React from 'react'
 import { Button } from '../../common/Button'
 import TransactionHistory from './TransactionHistory'
 import DashboardSummaryCards from '../welcomeCard/DashboardSummaryCards';
+import { months, getCurrentMonth } from '../../../utils/constants';
 
-const months = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
-];
 function TransactionsPage() {
 
-  const [selectedMonth, setSelectedMonth] = React.useState(months[0]);
+  const [selectedMonth, setSelectedMonth] = React.useState(getCurrentMonth());
 
   return (
     <div className="flex flex-col gap-6 p-4 md:p-8">

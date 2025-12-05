@@ -3,13 +3,7 @@ import Dropdown from "../../common/Dropdown";
 import {Button} from "../../common/Button";
 import { Link } from 'react-router-dom';
 import { useBankStore } from '../../../store/useBankStore';
-
-const months = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
-];
-
-// Removed static transactions array
+import { months } from '../../../utils/constants';
 
 function formatDate(dateStr) {
   const date = new Date(dateStr);
@@ -41,15 +35,17 @@ function ChannelBadge({ channel }) {
   );
 }
 
-export default function TransactionHistory({ months = months, selectedMonth = months[0], onMonthChange }) {
+export default function TransactionHistory({ months: propMonths = months, selectedMonth, onMonthChange }) {
   const { transactions } = useBankStore();
 
   // Filter transactions by selected month
-  const filteredTransactions = transactions.filter(tx => {
-    const txDate = new Date(tx.date);
-    const txMonth = months[txDate.getMonth()];
-    return txMonth === selectedMonth;
-  });
+  const filteredTransactions = transactions
+    .filter(tx => {
+      const txDate = new Date(tx.date);
+      const txMonth = months[txDate.getMonth()];
+      return txMonth === selectedMonth;
+    })
+    .sort((a, b) => new Date(b.date) - new Date(a.date));
 
   return (
     <div className="bg-white rounded-2xl shadow p-6">
@@ -59,7 +55,7 @@ export default function TransactionHistory({ months = months, selectedMonth = mo
       </div>
       <div className="flex justify-between items-center mb-4">
         <h2 className="font-bold text-lg text-gray-900">Transaction History</h2>
-        <Dropdown options={months} value={selectedMonth} onChange={e => onMonthChange(e.target.value)} />
+        <Dropdown options={propMonths} value={selectedMonth} onChange={e => onMonthChange(e.target.value)} />
       </div>
       <div className="overflow-x-auto max-w-[280px] sm:max-w-[650px] lg:max-w-full w-full">
         <table className="min-w-[900px] overflow-x-auto w-full text-sm">

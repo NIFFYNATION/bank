@@ -7,14 +7,10 @@ import DashboardActions from '../components/dashboard/welcomeCard/DashboardActio
 import DashboardQuickTransfer from '../components/dashboard/welcomeCard/DashboardQuickTransfer';
 import TransactionHistory from '../components/dashboard/transactions/TransactionHistory';
 import CashFlowReport from '../components/dashboard/welcomeCard/CashFlowReport';
-
-const months = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
-];
+import { months, getCurrentMonth } from '../utils/constants';
 
 export default function DashboardPage() {
-  const [selectedMonth, setSelectedMonth] = React.useState(months[0]);
+  const [selectedMonth, setSelectedMonth] = React.useState(getCurrentMonth());
 
   return (
     <DashboardDataProvider>
