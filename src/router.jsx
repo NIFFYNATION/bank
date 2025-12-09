@@ -12,22 +12,29 @@ import LoanRequest from './components/dashboard/loanRequest/LoanRequest';
 import LoanHistory from './components/dashboard/loanHistory/LoanHistory';
 import IrsTaxRefund from './components/dashboard/irsTaxRefund/IrsTaxRefund';
 import Settings from './components/dashboard/settings/Settings';
-
-
+import Signin from './components/common/auth/Signin';
+import Signup from './components/common/auth/Signup';
+import Profile from './components/dashboard/profile/Profile';
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
     children: [
-     
       {
         path: '/',
         element: (
             <Homepage />
         ),
       },
-     
+      {
+        path: '/signin',
+        element: <Signin />,
+      },
+      {
+        path: '/signup',
+        element: <Signup />,
+      },
       {
         path: '/dashboard',
         element: (
@@ -44,6 +51,7 @@ export const router = createBrowserRouter([
           { path: 'loan-history', element: <LoanHistory /> },
           { path: 'irs-tax-refund', element: <IrsTaxRefund /> },
           { path: 'settings', element: <Settings /> },
+          { path: 'profile', element: <Profile /> },
         ],
       },
     ],

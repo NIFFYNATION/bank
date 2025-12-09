@@ -141,7 +141,7 @@ function Sidebar() {
           </div>
         )}
         <div className="flex gap-2 w-full">
-          <button className="flex-1 py-1 px-5 text-xs border rounded text-text-primary hover:bg-gray-100">Profile</button>
+          <Link to="/dashboard/profile" className="flex-1 py-1 px-5 text-xs border rounded text-text-primary hover:bg-gray-100 text-center">Profile</Link>
           <button className="flex-1 py-1 px-5 text-xs border rounded text-white bg-danger hover:bg-red-600">Logout</button>
         </div>
           </>
