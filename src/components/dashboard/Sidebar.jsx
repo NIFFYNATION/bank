@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { useSidebar } from '../../contexts/SidebarContext'
 import '../../styles/scrollbar.css'; // Import the global scrollbar CSS
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
 const user = {
   name: 'real real',
@@ -55,10 +56,9 @@ function MenuSection({ title, items }) {
               <NavLink
                 to={item.to}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 px-4 py-2 rounded-lg transition-colors ${
-                    isActive
-                      ? 'bg-primary hover:bg-primary-light text-text-grey font-semibold'
-                      : 'text-text-primary hover:bg-gray-100'
+                  `flex items-center gap-3 px-4 py-2 rounded-lg transition-colors ${isActive
+                    ? 'bg-primary hover:bg-primary-light text-text-grey font-semibold'
+                    : 'text-text-primary hover:bg-gray-100'
                   }`
                 }
                 end
@@ -81,7 +81,14 @@ function MenuSection({ title, items }) {
 
 function Sidebar() {
   const { isCollapsed, toggleSidebar } = useSidebar();
+  const { logout } = useAuth();
+  const navigate = useNavigate();
   const [isMobile, setIsMobile] = useState(false);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/signin');
+  };
 
   useEffect(() => {
     const handleResize = () => {
@@ -114,7 +121,7 @@ function Sidebar() {
           >
             {/* X icon SVG */}
             <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <path d="M18 6L6 18M6 6l12 12"/>
+              <path d="M18 6L6 18M6 6l12 12" />
             </svg>
           </button>
         )}
@@ -132,18 +139,18 @@ function Sidebar() {
         </div>
         {!isCollapsed && (
           <>
-          <div className="font-semibold text-text-primary">{user.name}</div>
-        <div className="text-xs text-text-secondary mb-1">Account No: {user.id}</div>
-        {user.kyc && (
-          <div className="flex items-center text-xs text-success mb-2">
-            <span className="w-2 h-2 bg-success rounded-full mr-1"></span>
-            KYC Verified
-          </div>
-        )}
-        <div className="flex gap-2 w-full">
-          <Link to="/dashboard/profile" className="flex-1 py-1 px-5 text-xs border rounded text-text-primary hover:bg-gray-100 text-center">Profile</Link>
-          <button className="flex-1 py-1 px-5 text-xs border rounded text-white bg-danger hover:bg-red-600">Logout</button>
-        </div>
+            <div className="font-semibold text-text-primary">{user.name}</div>
+            <div className="text-xs text-text-secondary mb-1">Account No: {user.id}</div>
+            {user.kyc && (
+              <div className="flex items-center text-xs text-success mb-2">
+                <span className="w-2 h-2 bg-success rounded-full mr-1"></span>
+                KYC Verified
+              </div>
+            )}
+            <div className="flex gap-2 w-full">
+              <Link to="/dashboard/profile" className="flex-1 py-1 px-5 text-xs border rounded text-text-primary hover:bg-gray-100 text-center">Profile</Link>
+              <button onClick={handleLogout} className="flex-1 py-1 px-5 text-xs border rounded text-white bg-danger hover:bg-red-600">Logout</button>
+            </div>
           </>
         )}
       </div>
