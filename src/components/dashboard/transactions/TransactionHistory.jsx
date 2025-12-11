@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Dropdown from "../../common/Dropdown";
-import {Button} from "../../common/Button";
+import { Button } from "../../common/Button";
 import { Link } from 'react-router-dom';
 import { useBankStore } from '../../../store/useBankStore';
 import { months } from '../../../utils/constants';
@@ -35,22 +35,42 @@ function ChannelBadge({ channel }) {
   );
 }
 
-export default function TransactionHistory({ months: propMonths = months, selectedMonth, onMonthChange }) {
-  const { transactions } = useBankStore();
+export default function TransactionHistory({ months: propMonths = months, selectedMonth, onMonthChange, transactions: propTransactions }) {
+  const { transactions: storeTransactions } = useBankStore();
 
-  // Filter transactions by selected month
-  const filteredTransactions = transactions
-    .filter(tx => {
-      const txDate = new Date(tx.date);
-      const txMonth = months[txDate.getMonth()];
-      return txMonth === selectedMonth;
-    })
-    .sort((a, b) => new Date(b.date) - new Date(a.date));
+  // Use passed transactions if available, otherwise use store transactions
+  const sourceTransactions = propTransactions || storeTransactions;
+
+  // If transactions are passed via props, we assume they are already filtered by the parent (search/date).
+  // But we still apply month filtering IF selectedMonth is passed AND it is not null, 
+  // though typically if propTransactions is passed, the parent might handle all filtering.
+  // However, specifically for the dashboard widget use case vs full page use case:
+  // - Dashboard: relies on Month dropdown.
+  // - Full Page: relies on Search/DateRange but might still have month dropdown? 
+  // The requirement says "filter by calender", implying a date range or specific date.
+  // Let's assume if propTransactions is passed, we display them as is (sorted).
+
+  const displayTransactions = useMemo(() => {
+    let txs = sourceTransactions;
+
+    // Only apply month filtering if we are in "Dashboard Widget Mode" (implied by NOT having propTransactions)
+    // OR if we want to support both.
+    // Existing behavior for Dashboard: Filter by selectedMonth.
+    if (!propTransactions && selectedMonth) {
+      txs = txs.filter(tx => {
+        const txDate = new Date(tx.date);
+        const txMonth = months[txDate.getMonth()];
+        return txMonth === selectedMonth;
+      });
+    }
+
+    return txs.sort((a, b) => new Date(b.date) - new Date(a.date));
+  }, [sourceTransactions, selectedMonth, propTransactions]);
 
   return (
     <div className="bg-white rounded-2xl shadow p-6">
       <div className='flex justify-end pb-6'>
-      <Link to='/dashboard/transactionspage' className='bg-primary-light rounded-lg py-3 px-4 text-background' variant="primary" >View All Transactions</Link>
+        <Link to='/dashboard/transactionspage' className='bg-primary-light rounded-lg py-3 px-4 text-background' variant="primary" >View All Transactions</Link>
 
       </div>
       <div className="flex justify-between items-center mb-4">
@@ -71,12 +91,12 @@ export default function TransactionHistory({ months: propMonths = months, select
             </tr>
           </thead>
           <tbody>
-            {filteredTransactions.length === 0 ? (
+            {displayTransactions.length === 0 ? (
               <tr>
-                <td colSpan="7" className="text-center py-6 text-gray-400">No transactions for this month.</td>
+                <td colSpan="7" className="text-center py-6 text-gray-400">No transactions found.</td>
               </tr>
             ) : (
-              filteredTransactions.map(tx => (
+              displayTransactions.map(tx => (
                 <tr key={tx.id} className="border-t last:border-b-0 border-gray-100 hover:bg-gray-50 transition-colors duration-150">
                   <td className="py-4 px-2 text-gray-600">{formatDate(tx.date)}</td>
                   <td className="py-4 px-2 font-mono text-sm text-gray-500">{tx.id}</td>

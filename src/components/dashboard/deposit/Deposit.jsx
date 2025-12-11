@@ -32,24 +32,24 @@ export default function Deposit() {
     const fee = 0;
     const net = amt - fee;
     return [
-      { label: 'Amount', value: amt ? `$${amt.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}` : '-' },
+      { label: 'Amount', value: amt ? `$${amt.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '-' },
       { label: 'Fee', value: `$${fee.toFixed(2)}` },
-      { label: 'Net Deposit', value: amt ? `$${net.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}` : '-' , accent: true},
+      { label: 'Net Deposit', value: amt ? `$${net.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : '-', accent: true },
     ];
   }, [form]);
 
   const handleSubmit = () => {
     if (!valid) return;
-    
-    const result = depositMoney({
-      amount: parseFloat(form.amount),
-      description: form.reference || `Deposit via ${form.method}`,
-      method: form.method,
-      account: form.account,
-      date: form.date
-    });
 
-    if (result.success) {
+    try {
+      depositMoney({
+        amount: parseFloat(form.amount),
+        description: form.reference || `Deposit via ${form.method}`,
+        method: form.method,
+        account: form.account,
+        date: form.date
+      });
+
       setStatus({ type: 'success', message: 'Deposit successful! Funds have been added to your account.' });
       setForm({
         amount: '',
@@ -58,8 +58,8 @@ export default function Deposit() {
         reference: '',
         date: '',
       });
-    } else {
-      setStatus({ type: 'error', message: result.error });
+    } catch (error) {
+      setStatus({ type: 'error', message: error.message });
     }
   };
 
