@@ -12,6 +12,8 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@tailwindcss/vite": "^4.1.11",
+    "embla-carousel-autoplay": "^8.6.0",
+    "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.19.2",
     "jspdf": "^3.0.4",
     "jspdf-autotable": "^5.0.2",

@@ -1,4 +1,6 @@
 import React from 'react';
+import useEmblaCarousel from 'embla-carousel-react';
+import Autoplay from 'embla-carousel-autoplay';
 import {
   ArrowTrendingUpIcon,
   ArrowTrendingDownIcon,
@@ -9,6 +11,19 @@ import { useBankStore, formatCurrency } from '../../../store/useBankStore';
 
 export default function DashboardSummaryCards() {
   const { currentBalance, monthlyIncome, monthlyOutgoing, transactionLimit } = useBankStore();
+
+  const [emblaRef] = useEmblaCarousel(
+    {
+      loop: true,
+      align: 'start',
+    },
+    [
+      Autoplay({
+        delay: 3500,
+        stopOnInteraction: false,
+      }),
+    ]
+  );
 
   const summaryCards = [
     {
@@ -34,21 +49,49 @@ export default function DashboardSummaryCards() {
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {summaryCards.map((card) => (
+    <>
+      {/* Mobile carousel */}
+      <div className="sm:hidden max-w-[310px]">
         <div
-          key={card.label}
-          className="flex items-center gap-4 rounded-xl shadow-sm p-4 bg-background"
+          ref={emblaRef}
+          className="overflow-hidden mx-[-1rem] pl-4"
         >
-          <div className="flex items-center justify-center w-12 h-12 rounded-full bg-background-alt">
-            {card.icon}
-          </div>
-          <div>
-            <div className="text-xs text-text-secondary font-medium">{card.label}</div>
-            <div className="text-lg font-bold text-primary">{card.value}</div>
+          <div className="flex gap-4">
+            {summaryCards.map((card) => (
+              <div
+                key={card.label}
+                className="flex-[0_0_80%] max-w-xs flex items-center gap-4 rounded-xl shadow-sm p-4 bg-background"
+              >
+                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-background-alt">
+                  {card.icon}
+                </div>
+                <div>
+                  <div className="text-xs text-text-secondary font-medium">{card.label}</div>
+                  <div className="text-lg font-bold text-primary">{card.value}</div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      ))}
-    </div>
+      </div>
+
+      {/* Desktop / tablet grid */}
+      <div className="hidden sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {summaryCards.map((card) => (
+          <div
+            key={card.label}
+            className="flex items-center gap-4 rounded-xl shadow-sm p-4 bg-background"
+          >
+            <div className="flex items-center justify-center w-12 h-12 rounded-full bg-background-alt">
+              {card.icon}
+            </div>
+            <div>
+              <div className="text-xs text-text-secondary font-medium">{card.label}</div>
+              <div className="text-lg font-bold text-primary">{card.value}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
   );
 }

@@ -20,14 +20,14 @@ function DashboardHeader() {
     <header
       className={`border-b border-primary-light fixed top-0 right-0 ${
         isCollapsed ? 'left-0 lg:left-[80px]' : 'left-0 lg:left-[250px]'
-      } h-[80px] bg-white z-20 transition-all justify-between duration-300 flex items-center px-6 shadow-sm`}
+      } h-[80px] bg-white z-20 transition-all justify-between duration-300 flex items-center px-6 shadow-sm w-full sm:w-auto`}
       style={{ minHeight: 80, fontFamily: 'Poppins, sans-serif' }}
     >
       {/* Hamburger button when sidebar is collapsed */}
       {isCollapsed && (
         <button
           onClick={toggleSidebar}
-          className="mr-4 p-2 rounded hover:bg-primary-light transition"
+          className="mr-0 md:mr-4 pr-2 rounded hover:bg-primary-light transition"
           aria-label="Open sidebar"
         >
           {/* Hamburger icon SVG */}
@@ -43,7 +43,7 @@ function DashboardHeader() {
       </div>
 
       {/* Right side: balance, notification, avatar */}
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-4 md:gap-6">
         {/* Balance */}
         <div className="flex items-center gap-2 bg-background-alt px-4 py-2 rounded-lg shadow-sm">
           <span className="text-text-secondary text-xs">Balance:</span>

@@ -17,7 +17,7 @@ const statusStyles = {
 
 export default function LoanHistory() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 max-w-[340px] my-10 mx-auto">
       <SectionCard title="Loan History" subtitle="Overview of your past and current loans" icon={ClipboardDocumentListIcon}>
         <div className="overflow-hidden rounded-lg border border-gray-100">
           <table className="min-w-full divide-y divide-gray-100">

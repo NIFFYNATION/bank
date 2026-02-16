@@ -14,7 +14,7 @@ export default function DashboardPage() {
 
   return (
     <DashboardDataProvider>
-      <div className="flex flex-col gap-6 p-4 md:p-8">
+      <div className="flex flex-col gap-6 py-4 md:p-8">
         <DashboardSummaryCards />
         <div className="flex flex-col lg:flex-row gap-6">
           <div className="flex-1">

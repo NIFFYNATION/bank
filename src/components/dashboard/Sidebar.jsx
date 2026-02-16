@@ -107,7 +107,7 @@ function Sidebar() {
   return (
     <aside
       className={`flex flex-col overflow-y-auto overflow-x-hidden fixed z-100 bg-background sidebar-scrollbar items-center shadow-md py-4  transition-all duration-300 h-screen 
-        ${isCollapsed ? 'w-[80px]' : 'w-[249px]'}`}
+        ${isCollapsed ? 'w-[80px]' : 'w-[249px] '}`}
     >
       {/* Logo and Close Button */}
       <div className="mb-6 flex items-center justify-between w-full px-4">
