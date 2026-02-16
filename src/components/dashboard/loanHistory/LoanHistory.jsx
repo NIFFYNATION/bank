@@ -17,10 +17,10 @@ const statusStyles = {
 
 export default function LoanHistory() {
   return (
-    <div className="space-y-8 max-w-[340px] my-10 mx-auto">
+    <div className="space-y-8 max-w-[340px] sm:max-w-full my-10 mx-auto">
       <SectionCard title="Loan History" subtitle="Overview of your past and current loans" icon={ClipboardDocumentListIcon}>
-        <div className="overflow-hidden rounded-lg border border-gray-100">
-          <table className="min-w-full divide-y divide-gray-100">
+        <div className="overflow-x-auto  sm:max-w-[650px] lg:max-w-full w-full rounded-lg border border-gray-100">
+          <table className="min-w-[600px] overflow-x-auto w-full divide-gray-100">
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-4 py-2 text-left text-xs font-medium text-gray-500">Loan ID</th>
