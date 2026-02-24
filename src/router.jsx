@@ -15,6 +15,7 @@ import Settings from './components/dashboard/settings/Settings';
 import Signin from './components/common/auth/Signin';
 import Signup from './components/common/auth/Signup';
 import Profile from './components/dashboard/profile/Profile';
+import AdminCreateAccount from './components/dashboard/admin/AdminCreateAccount';
 
 export const router = createBrowserRouter([
   {
@@ -52,6 +53,7 @@ export const router = createBrowserRouter([
           { path: 'irs-tax-refund', element: <IrsTaxRefund /> },
           { path: 'settings', element: <Settings /> },
           { path: 'profile', element: <Profile /> },
+          { path: 'admin', element: <AdminCreateAccount /> },
         ],
       },
     ],

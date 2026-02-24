@@ -40,6 +40,7 @@ const menuSections = [
     title: 'ACCOUNT',
     items: [
       { label: 'Settings', icon: '/icons/settings.svg', to: "/dashboard/settings" },
+      { label: 'Admin', icon: '/icons/settings.svg', to: "/dashboard/admin" },
     ],
   },
 ];

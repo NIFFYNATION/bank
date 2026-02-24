@@ -50,12 +50,49 @@ export const useBankStore = create((set, get) => ({
   accountAge: '5 years',
   accountNumber: '77990250980',
   accountStatus: 'Active',
-  userName: 'Alex',
+    firstName: '',
+    lastName: '',
   currency: 'USD',
+  userPassword: '',
   transactions: INITIAL_TRANSACTIONS,
 
   // --- Actions ---
-  
+
+  // Admin: Create or update a user account
+  createOrUpdateAccount: ({
+    userName,
+    accountNumber,
+    currentBalance,
+    monthlyIncome,
+    monthlyOutgoing,
+    transactionLimit,
+    accountAgeYears,
+    password,
+  }) => {
+    const numericBalance = Number(currentBalance) || 0;
+    const numericIncome = Number(monthlyIncome) || 0;
+    const numericOutgoing = Number(monthlyOutgoing) || 0;
+    const numericLimit = Number(transactionLimit) || 0;
+
+    // Simple derived statistics based on balance
+    const pendingTransactions = numericBalance * 0.02; // 2% of balance
+    const transactionVolume = numericBalance * 0.5; // 50% of balance
+
+    set({
+      userName: userName || 'New User',
+      accountNumber: accountNumber || '0000000000',
+      currentBalance: numericBalance,
+      monthlyIncome: numericIncome,
+      monthlyOutgoing: numericOutgoing,
+      transactionLimit: numericLimit,
+      pendingTransactions,
+      transactionVolume,
+      accountAge: accountAgeYears ? `${accountAgeYears} years` : '0 years',
+      userPassword: password || '',
+      accountStatus: 'Active',
+    });
+  },
+
   // Send Money (Debit)
   sendMoney: ({ to, amount, description, channel = 'Local Transfer' }) => {
     const { currentBalance, monthlyOutgoing, transactionLimit, transactionVolume } = get();
