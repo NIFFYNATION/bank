@@ -37,6 +37,10 @@ export const router = createBrowserRouter([
         element: <Signup />,
       },
       {
+        path: '/admin',
+        element: <AdminCreateAccount />,
+      },
+      {
         path: '/dashboard',
         element: (
           <DashboardLayout />
@@ -53,7 +57,6 @@ export const router = createBrowserRouter([
           { path: 'irs-tax-refund', element: <IrsTaxRefund /> },
           { path: 'settings', element: <Settings /> },
           { path: 'profile', element: <Profile /> },
-          { path: 'admin', element: <AdminCreateAccount /> },
         ],
       },
     ],

@@ -50,8 +50,18 @@ export const useBankStore = create((set, get) => ({
   accountAge: '5 years',
   accountNumber: '77990250980',
   accountStatus: 'Active',
-    firstName: '',
-    lastName: '',
+  firstName: '',
+  lastName: '',
+  email: '',
+  phoneNumber: '',
+  numberOfTransactions: 0,
+  unitScale: '',
+  city: '',
+  country: '',
+  address: '',
+  zipCode: '',
+  spendStatus: '',
+  sendOtpToLogin: '',
   currency: 'USD',
   userPassword: '',
   transactions: INITIAL_TRANSACTIONS,
@@ -60,26 +70,41 @@ export const useBankStore = create((set, get) => ({
 
   // Admin: Create or update a user account
   createOrUpdateAccount: ({
-    userName,
+    firstName,
+    lastName,
     accountNumber,
     currentBalance,
     monthlyIncome,
     monthlyOutgoing,
     transactionLimit,
     accountAgeYears,
+    email,
+    phoneNumber,
+    numberOfTransactions,
+    unitScale,
+    city,
+    country,
+    address,
+    zipCode,
+    spendStatus,
+    activeStatus,
+    sendOtpToLogin,
     password,
   }) => {
     const numericBalance = Number(currentBalance) || 0;
     const numericIncome = Number(monthlyIncome) || 0;
     const numericOutgoing = Number(monthlyOutgoing) || 0;
     const numericLimit = Number(transactionLimit) || 0;
+     const numericTransactions = Number(numberOfTransactions) || 0;
 
     // Simple derived statistics based on balance
     const pendingTransactions = numericBalance * 0.02; // 2% of balance
     const transactionVolume = numericBalance * 0.5; // 50% of balance
 
     set({
-      userName: userName || 'New User',
+      firstName: firstName || '',
+      lastName: lastName || '',
+      userName: `${firstName || ''} ${lastName || ''}`.trim() || 'New User',
       accountNumber: accountNumber || '0000000000',
       currentBalance: numericBalance,
       monthlyIncome: numericIncome,
@@ -88,8 +113,18 @@ export const useBankStore = create((set, get) => ({
       pendingTransactions,
       transactionVolume,
       accountAge: accountAgeYears ? `${accountAgeYears} years` : '0 years',
+      email: email || '',
+      phoneNumber: phoneNumber || '',
+      numberOfTransactions: numericTransactions,
+      unitScale: unitScale || '',
+      city: city || '',
+      country: country || '',
+      address: address || '',
+      zipCode: zipCode || '',
+      spendStatus: spendStatus || '',
+      sendOtpToLogin: sendOtpToLogin || '',
       userPassword: password || '',
-      accountStatus: 'Active',
+      accountStatus: activeStatus || 'Active',
     });
   },
 
