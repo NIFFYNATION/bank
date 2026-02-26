@@ -4,7 +4,6 @@ import { useBankStore, formatCurrency } from '../../../store/useBankStore';
 
 export default function AdminCreateAccount() {
   const createOrUpdateAccount = useBankStore((state) => state.createOrUpdateAccount);
-  const currentBalance = useBankStore((state) => state.currentBalance);
   const firstName = useBankStore((state) => state.firstName);
   const lastName = useBankStore((state) => state.lastName);
 
@@ -12,13 +11,14 @@ export default function AdminCreateAccount() {
     firstName: firstName || '',
     lastName: lastName || '',
     accountNumber: '',
-    currentBalance: currentBalance || '',
     monthlyIncome: '',
     monthlyOutgoing: '',
     transactionLimit: '',
     email: '',
     phoneNumber: '',
     numberOfTransactions: '',
+    firstTransactionDate: '',
+    lastTransactionDate: '',
     unitScale: '',
     city: '',
     country: '',
@@ -70,7 +70,7 @@ export default function AdminCreateAccount() {
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto">
+    <div className="w-full max-w-3xl my-8 mx-auto">
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
@@ -84,10 +84,7 @@ export default function AdminCreateAccount() {
               Set up a new user account with initial balances, limits, and password.
             </p>
           </div>
-          <div className="text-right text-xs md:text-sm text-text-secondary">
-            <div className="font-semibold text-primary">Preview Balance</div>
-            <div>{formatCurrency(currentBalance || 0)}</div>
-          </div>
+          
         </div>
 
         {status && (
