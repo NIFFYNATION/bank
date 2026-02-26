@@ -32,6 +32,15 @@ const INITIAL_TRANSACTIONS = [
     id: 'ADC-076223',
     name: 'Anastasia',
     date: '2023-01-29',
+    description: 'Your account has been credited with $500.00 from John Doe. Reference: INV-12345.',
+    type: 'Credit',
+    amount: 500,
+    channel: 'International Wire',
+  },
+  {
+    id: 'ADC-076223',
+    name: 'Anastasia',
+    date: '2023-01-29',
     description: 'Payment received',
     type: 'Credit',
     amount: 500,
@@ -63,7 +72,6 @@ export const useBankStore = create((set, get) => ({
   spendStatus: '',
   sendOtpToLogin: '',
   currency: 'USD',
-  userPassword: '',
   transactions: INITIAL_TRANSACTIONS,
 
   // --- Actions ---

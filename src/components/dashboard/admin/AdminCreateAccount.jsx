@@ -255,6 +255,40 @@ export default function AdminCreateAccount() {
                 step="1"
                 required
               />
+
+
+              <div>
+              <label className="block text-xs font-medium text-text-secondary mb-1">
+                 Transaction Starts?
+              </label>
+               <input
+                type="date"
+                name="firstTransactionDate"
+                value={form.firstTransactionDate}
+                onChange={handleChange}
+                className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-light"
+                min="0"
+                step="1"
+                required
+              />
+              </div>
+
+              <div>
+               <label className="block text-xs font-medium text-text-secondary mb-1">
+                 Transaction Ends?
+              </label>
+              <input
+                type="date"
+                name="lastTransactionDate" 
+                value={form.lastTransactionDate}
+                onChange={handleChange}
+                className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-light"
+                min="0"
+                step="1"
+                required
+              />
+              </div>
+             
             </div>
 
             <div>
@@ -412,6 +446,10 @@ export default function AdminCreateAccount() {
               />
             </div>
           </div>
+
+
+
+
 
           <div className="flex justify-end">
             <button
