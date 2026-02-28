@@ -16,7 +16,7 @@ export default function AdminCreateAccount() {
     transactionLimit: '',
     email: '',
     phoneNumber: '',
-    numberOfTransactions: '',
+    numberOfTransactionsToGenerate: '',
     firstTransactionDate: '',
     lastTransactionDate: '',
     unitScale: '',
@@ -243,7 +243,7 @@ export default function AdminCreateAccount() {
 
             <div>
               <label className="block text-xs font-medium text-text-secondary mb-1">
-                Number of Transactions
+                Number of Transactions you want to generate
               </label>
               <input
                 type="number"
