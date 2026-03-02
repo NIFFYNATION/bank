@@ -6,19 +6,19 @@ export default function AdminCreateAccount() {
   const createOrUpdateAccount = useBankStore((state) => state.createOrUpdateAccount);
   const firstName = useBankStore((state) => state.firstName);
   const lastName = useBankStore((state) => state.lastName);
-
+  const transactions = useBankStore((state) => state.transactions);
   const [form, setForm] = useState({
     firstName: firstName || '',
     lastName: lastName || '',
     accountNumber: '',
-    monthlyIncome: '',
-    monthlyOutgoing: '',
-    transactionLimit: '',
+    currentBalance: '',
     email: '',
     phoneNumber: '',
-    numberOfTransactionsToGenerate: '',
+    numberOfTransactions: '',
     firstTransactionDate: '',
     lastTransactionDate: '',
+    transactionTypePreference: '',
+    amountRange: '',
     unitScale: '',
     city: '',
     country: '',
@@ -44,6 +44,13 @@ export default function AdminCreateAccount() {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
+
+  const numericBalance = Number(form.currentBalance) || 0;
+  const numericAgeYears = Number(form.accountAgeYears) || 0;
+  const ageFactor = 1 + Math.min(Math.max(numericAgeYears, 0), 20) * 0.03;
+  const previewMonthlyIncome = numericBalance * 0.02 * ageFactor;
+  const previewMonthlyOutgoing = numericBalance * 0.01 * ageFactor;
+  const previewTransactionLimit = numericBalance * 0.4;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -149,54 +156,6 @@ export default function AdminCreateAccount() {
 
             <div>
               <label className="block text-xs font-medium text-text-secondary mb-1">
-                Monthly Income (USD)
-              </label>
-              <input
-                type="number"
-                name="monthlyIncome"
-                value={form.monthlyIncome}
-                onChange={handleChange}
-                className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-light"
-                min="0"
-                step="0.01"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-medium text-text-secondary mb-1">
-                Monthly Outgoing (USD)
-              </label>
-              <input
-                type="number"
-                name="monthlyOutgoing"
-                value={form.monthlyOutgoing}
-                onChange={handleChange}
-                className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-light"
-                min="0"
-                step="0.01"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-medium text-text-secondary mb-1">
-                Transaction Limit (USD)
-              </label>
-              <input
-                type="number"
-                name="transactionLimit"
-                value={form.transactionLimit}
-                onChange={handleChange}
-                className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-light"
-                min="0"
-                step="0.01"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-medium text-text-secondary mb-1">
                 Account Age (years)
               </label>
               <input
@@ -209,6 +168,33 @@ export default function AdminCreateAccount() {
                 step="1"
                 required
               />
+            </div>
+
+            <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+              <div className="rounded-xl border border-gray-100 bg-background-alt p-3">
+                <div className="text-[11px] text-text-secondary uppercase tracking-wide">
+                  Monthly Income (auto)
+                </div>
+                <div className="mt-1 text-sm font-semibold text-primary">
+                  {formatCurrency(previewMonthlyIncome || 0)}
+                </div>
+              </div>
+              <div className="rounded-xl border border-gray-100 bg-background-alt p-3">
+                <div className="text-[11px] text-text-secondary uppercase tracking-wide">
+                  Monthly Outgoing (auto)
+                </div>
+                <div className="mt-1 text-sm font-semibold text-primary">
+                  {formatCurrency(previewMonthlyOutgoing || 0)}
+                </div>
+              </div>
+              <div className="rounded-xl border border-gray-100 bg-background-alt p-3">
+                <div className="text-[11px] text-text-secondary uppercase tracking-wide">
+                  Transaction Limit (auto)
+                </div>
+                <div className="mt-1 text-sm font-semibold text-primary">
+                  {formatCurrency(previewTransactionLimit || 0)}
+                </div>
+              </div>
             </div>
 
             <div>
@@ -256,39 +242,70 @@ export default function AdminCreateAccount() {
                 required
               />
 
-
-              <div>
-              <label className="block text-xs font-medium text-text-secondary mb-1">
-                 Transaction Starts?
-              </label>
-               <input
-                type="date"
-                name="firstTransactionDate"
-                value={form.firstTransactionDate}
-                onChange={handleChange}
-                className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-light"
-                min="0"
-                step="1"
-                required
-              />
+              <div className="mt-3">
+                <label className="block text-xs font-medium text-text-secondary mb-1">
+                  Transaction Starts?
+                </label>
+                <input
+                  type="date"
+                  name="firstTransactionDate"
+                  value={form.firstTransactionDate}
+                  onChange={handleChange}
+                  className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-light"
+                  required
+                />
               </div>
 
-              <div>
-               <label className="block text-xs font-medium text-text-secondary mb-1">
-                 Transaction Ends?
-              </label>
-              <input
-                type="date"
-                name="lastTransactionDate" 
-                value={form.lastTransactionDate}
-                onChange={handleChange}
-                className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-light"
-                min="0"
-                step="1"
-                required
-              />
+              <div className="mt-3">
+                <label className="block text-xs font-medium text-text-secondary mb-1">
+                  Transaction Ends?
+                </label>
+                <input
+                  type="date"
+                  name="lastTransactionDate"
+                  value={form.lastTransactionDate}
+                  onChange={handleChange}
+                  className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-light"
+                  required
+                />
               </div>
-             
+
+              <div className="mt-3">
+                <label className="block text-xs font-medium text-text-secondary mb-1">
+                  Type of Transactions
+                </label>
+                <select
+                  name="transactionTypePreference"
+                  value={form.transactionTypePreference}
+                  onChange={handleChange}
+                  className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-light"
+                  required
+                >
+                  <option value="">Select type</option>
+                  <option value="credit">Credit only</option>
+                  <option value="debit">Debit only</option>
+                  <option value="both">Both credit and debit</option>
+                </select>
+              </div>
+
+              <div className="mt-3">
+                <label className="block text-xs font-medium text-text-secondary mb-1">
+                  Amount Range
+                </label>
+                <select
+                  name="amountRange"
+                  value={form.amountRange}
+                  onChange={handleChange}
+                  className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-light"
+                  required
+                >
+                  <option value="">Select range</option>
+                  <option value="hundreds">Hundreds (100 - 999)</option>
+                  <option value="thousands">Thousands (1,000 - 9,999)</option>
+                  <option value="hundreds_thousands">Hundreds &amp; Thousands (100 - 9,999)</option>
+                  <option value="millions">Millions (100,000+)</option>
+                </select>
+              </div>
             </div>
 
             <div>
@@ -498,19 +515,19 @@ export default function AdminCreateAccount() {
             <div>
               <span className="text-text-secondary">Monthly Income</span>
               <div className="font-semibold text-primary">
-                {formatCurrency(Number(createdAccount.monthlyIncome || 0))}
+                {formatCurrency(Number(storeMonthlyIncome || 0))}
               </div>
             </div>
             <div>
               <span className="text-text-secondary">Monthly Outgoing</span>
               <div className="font-semibold text-primary">
-                {formatCurrency(Number(createdAccount.monthlyOutgoing || 0))}
+                {formatCurrency(Number(storeMonthlyOutgoing || 0))}
               </div>
             </div>
             <div>
               <span className="text-text-secondary">Transaction Limit</span>
               <div className="font-semibold text-primary">
-                {formatCurrency(Number(createdAccount.transactionLimit || 0))}
+                {formatCurrency(Number(storeTransactionLimit || 0))}
               </div>
             </div>
             <div>
@@ -523,6 +540,18 @@ export default function AdminCreateAccount() {
               <span className="text-text-secondary">Number of Transactions</span>
               <div className="font-semibold text-primary">
                 {createdAccount.numberOfTransactions}
+              </div>
+            </div>
+            <div>
+              <span className="text-text-secondary">Transaction Type Preference</span>
+              <div className="font-semibold text-primary">
+                {createdAccount.transactionTypePreference}
+              </div>
+            </div>
+            <div>
+              <span className="text-text-secondary">Amount Range</span>
+              <div className="font-semibold text-primary">
+                {createdAccount.amountRange}
               </div>
             </div>
             <div>
@@ -562,6 +591,61 @@ export default function AdminCreateAccount() {
               </div>
             </div>
           </div>
+
+          {Array.isArray(transactions) && transactions.length > 0 && (
+            <div className="mt-8">
+              <h3 className="text-md font-semibold text-primary mb-3">
+                Generated Transactions
+              </h3>
+              <div className="overflow-x-auto">
+                <table className="min-w-full text-xs md:text-sm">
+                  <thead>
+                    <tr className="text-text-secondary border-b border-gray-100">
+                      <th className="py-2 pr-3 text-left">Date</th>
+                      <th className="py-2 pr-3 text-left">Name</th>
+                      <th className="py-2 pr-3 text-left">Description</th>
+                      <th className="py-2 pr-3 text-left">Channel</th>
+                      <th className="py-2 pr-3 text-left">Type</th>
+                      <th className="py-2 pl-3 text-right">Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {transactions.map((tx) => (
+                      <tr
+                        key={tx.id}
+                        className="border-b border-gray-50 last:border-b-0 hover:bg-gray-50"
+                      >
+                        <td className="py-2 pr-3 text-text-secondary">{tx.date}</td>
+                        <td className="py-2 pr-3 font-medium text-primary">{tx.name}</td>
+                        <td className="py-2 pr-3 text-text-secondary">
+                          {tx.description}
+                        </td>
+                        <td className="py-2 pr-3 text-text-secondary">{tx.channel}</td>
+                        <td className="py-2 pr-3">
+                          <span
+                            className={`inline-flex px-2 py-0.5 rounded-full text-[11px] font-semibold ${
+                              tx.type === 'Credit'
+                                ? 'bg-green-50 text-green-600 border border-green-200'
+                                : 'bg-red-50 text-red-500 border border-red-200'
+                            }`}
+                          >
+                            {tx.type}
+                          </span>
+                        </td>
+                        <td
+                          className={`py-2 pl-3 text-right font-semibold ${
+                            tx.type === 'Credit' ? 'text-green-600' : 'text-red-500'
+                          }`}
+                        >
+                          {formatCurrency(tx.amount)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
         </motion.div>
       )}
     </div>
