@@ -153,10 +153,10 @@ const INITIAL_TRANSACTIONS = [
     id: 'ADC-076223',
     name: 'John Doe',
     date: '2023-01-29',
-    description: 'Your account has been credited with $500.00 from John Doe. Reference: INV-12345.',
+    description: 'Your account was credited with $500.00 from John Doe.',
     type: 'Credit',
     amount: 3000,
-    channel: 'International Wire',
+    channel: 'Local',
   },
   {
     id: 'ADC-076223',
@@ -171,7 +171,7 @@ const INITIAL_TRANSACTIONS = [
     id: 'AWC-077723',
     name: 'Brenda Smith',
     date: '2023-01-29',
-    description: 'You transferred the sum of $1000.00 to Brenda Smith. Reference: INV-12355.',
+    description: 'You transferred the sum of $1000.00 to Brenda Smith.',
     type: 'Debit',
     amount: 200,
     channel: 'International Wire',
@@ -180,15 +180,15 @@ const INITIAL_TRANSACTIONS = [
 
 export const useBankStore = create((set, get) => ({
   // --- State ---
-  currentBalance: 1181860,
-  monthlyIncome: 12700, // Sum of credits in current month (mock)
-  monthlyOutgoing: 15.99, // Sum of debits in current month (mock)
-  transactionLimit: 500000,
-  pendingTransactions: 15200, // value of pending
-  transactionVolume: 658342.82,
-  accountAge: '5 years',
-  accountNumber: '77990250980',
-  accountStatus: 'Active',
+  currentBalance: 0,
+  monthlyIncome: 0, // Sum of credits in current month (mock)
+  monthlyOutgoing: 0, // Sum of debits in current month (mock)
+  transactionLimit: 0,
+  pendingTransactions: 0, // value of pending
+  transactionVolume: 0,
+  accountAge: ' ',
+  accountNumber: ' ',
+  accountStatus: ' ',
   firstName: '',
   lastName: '',
   email: '',
@@ -235,14 +235,7 @@ export const useBankStore = create((set, get) => ({
     password,
   }) => {
     const numericBalance = Number(currentBalance) || 0;
-    const numericAgeYears = Number(accountAgeYears) || 0;
     const numericTransactions = Number(numberOfTransactions) || 0;
-
-    const ageFactor = 1 + Math.min(Math.max(numericAgeYears, 0), 20) * 0.03;
-
-    const monthlyIncome = numericBalance * 0.02 * ageFactor;
-    const monthlyOutgoing = numericBalance * 0.01 * ageFactor;
-    const transactionLimit = numericBalance * 0.4;
 
     // Simple derived statistics based on balance
     const pendingTransactions = numericBalance * 0.02; // 2% of balance
@@ -264,6 +257,17 @@ export const useBankStore = create((set, get) => ({
     } catch (e) {
       // If generation fails, keep existing transactions
     }
+
+    // Derive monthly income/outgoing from generated history
+    const monthlyIncome = generatedTransactions
+      .filter((tx) => tx.type === 'Credit')
+      .reduce((sum, tx) => sum + Number(tx.amount || 0), 0);
+
+    const monthlyOutgoing = generatedTransactions
+      .filter((tx) => tx.type === 'Debit')
+      .reduce((sum, tx) => sum + Number(tx.amount || 0), 0);
+
+    const transactionLimit = numericBalance * 0.4;
 
     set({
       firstName: firstName || '',

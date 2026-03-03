@@ -7,6 +7,9 @@ export default function AdminCreateAccount() {
   const firstName = useBankStore((state) => state.firstName);
   const lastName = useBankStore((state) => state.lastName);
   const transactions = useBankStore((state) => state.transactions);
+  const storeMonthlyIncome = useBankStore((state) => state.monthlyIncome);
+  const storeMonthlyOutgoing = useBankStore((state) => state.monthlyOutgoing);
+  const storeTransactionLimit = useBankStore((state) => state.transactionLimit);
   const [form, setForm] = useState({
     firstName: firstName || '',
     lastName: lastName || '',
@@ -46,11 +49,6 @@ export default function AdminCreateAccount() {
   };
 
   const numericBalance = Number(form.currentBalance) || 0;
-  const numericAgeYears = Number(form.accountAgeYears) || 0;
-  const ageFactor = 1 + Math.min(Math.max(numericAgeYears, 0), 20) * 0.03;
-  const previewMonthlyIncome = numericBalance * 0.02 * ageFactor;
-  const previewMonthlyOutgoing = numericBalance * 0.01 * ageFactor;
-  const previewTransactionLimit = numericBalance * 0.4;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -176,7 +174,7 @@ export default function AdminCreateAccount() {
                   Monthly Income (auto)
                 </div>
                 <div className="mt-1 text-sm font-semibold text-primary">
-                  {formatCurrency(previewMonthlyIncome || 0)}
+                  {formatCurrency(Number(storeMonthlyIncome || 0))}
                 </div>
               </div>
               <div className="rounded-xl border border-gray-100 bg-background-alt p-3">
@@ -184,7 +182,7 @@ export default function AdminCreateAccount() {
                   Monthly Outgoing (auto)
                 </div>
                 <div className="mt-1 text-sm font-semibold text-primary">
-                  {formatCurrency(previewMonthlyOutgoing || 0)}
+                  {formatCurrency(Number(storeMonthlyOutgoing || 0))}
                 </div>
               </div>
               <div className="rounded-xl border border-gray-100 bg-background-alt p-3">
@@ -192,7 +190,7 @@ export default function AdminCreateAccount() {
                   Transaction Limit (auto)
                 </div>
                 <div className="mt-1 text-sm font-semibold text-primary">
-                  {formatCurrency(previewTransactionLimit || 0)}
+                  {formatCurrency(Number(storeTransactionLimit || 0))}
                 </div>
               </div>
             </div>
