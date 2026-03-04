@@ -39,9 +39,7 @@ export default function DashboardPage() {
             onMonthChange={setSelectedMonth}
           />
           <TransactionHistory
-            months={months}
-            selectedMonth={selectedMonth}
-            onMonthChange={setSelectedMonth}
+            limit={5}
           />
         </div>
       </div>

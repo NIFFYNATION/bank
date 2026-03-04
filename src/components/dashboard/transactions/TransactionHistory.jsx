@@ -35,7 +35,7 @@ function ChannelBadge({ channel }) {
   );
 }
 
-export default function TransactionHistory({ months: propMonths = months, selectedMonth, onMonthChange, transactions: propTransactions }) {
+export default function TransactionHistory({ months: propMonths = months, selectedMonth, onMonthChange, transactions: propTransactions, limit }) {
   const { transactions: storeTransactions } = useBankStore();
 
   // Use passed transactions if available, otherwise use store transactions
@@ -53,10 +53,8 @@ export default function TransactionHistory({ months: propMonths = months, select
   const displayTransactions = useMemo(() => {
     let txs = sourceTransactions;
 
-    // Only apply month filtering if we are in "Dashboard Widget Mode" (implied by NOT having propTransactions)
-    // OR if we want to support both.
-    // Existing behavior for Dashboard: Filter by selectedMonth.
-    if (!propTransactions && selectedMonth) {
+    // Only apply month filtering if we are NOT in limited mode and NOT receiving propTransactions
+    if (!propTransactions && !limit && selectedMonth) {
       txs = txs.filter(tx => {
         const txDate = new Date(tx.date);
         const txMonth = months[txDate.getMonth()];
@@ -64,8 +62,11 @@ export default function TransactionHistory({ months: propMonths = months, select
       });
     }
 
-    return txs.sort((a, b) => new Date(b.date) - new Date(a.date));
-  }, [sourceTransactions, selectedMonth, propTransactions]);
+    const sorted = txs.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    // If limit is set, only show the most recent N transactions
+    return limit ? sorted.slice(0, limit) : sorted;
+  }, [sourceTransactions, selectedMonth, propTransactions, limit]);
 
   return (
     <div className="bg-white rounded-2xl shadow p-6">
@@ -74,8 +75,10 @@ export default function TransactionHistory({ months: propMonths = months, select
 
       </div>
       <div className="flex justify-between items-center mb-4">
-        <h2 className="font-bold text-lg text-gray-900">Transaction History</h2>
-        <Dropdown options={propMonths} value={selectedMonth} onChange={e => onMonthChange(e.target.value)} />
+        <h2 className="font-bold text-lg text-gray-900">{limit ? 'Recent Transactions' : 'Transaction History'}</h2>
+        {!limit && onMonthChange && (
+          <Dropdown options={propMonths} value={selectedMonth} onChange={e => onMonthChange(e.target.value)} />
+        )}
       </div>
       <div className="overflow-x-auto max-w-[280px] sm:max-w-[650px] lg:max-w-full w-full">
         <table className="min-w-[900px] overflow-x-auto w-full text-sm">
