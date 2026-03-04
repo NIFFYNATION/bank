@@ -383,6 +383,50 @@ export const useBankStore = create(
           transactions: [newTransaction, ...get().transactions],
         });
       },
+
+      // Admin: Manually add a transaction
+      addManualTransaction: ({ date, name, description, channel, type, amount }) => {
+        const { currentBalance, monthlyIncome, monthlyOutgoing, transactionVolume } = get();
+        const numAmount = parseFloat(amount);
+
+        if (isNaN(numAmount) || numAmount <= 0) {
+          throw new Error('Invalid amount');
+        }
+
+        const newTransaction = {
+          id: generateRandomId(),
+          name: name || 'Unknown',
+          date: date || new Date().toISOString().split('T')[0],
+          description: description || (type === 'Credit' ? 'Manual credit' : 'Manual debit'),
+          type: type || 'Credit',
+          amount: numAmount,
+          channel: channel || 'Local Transfer',
+        };
+
+        const updates = {
+          transactionVolume: transactionVolume + numAmount,
+          transactions: [...get().transactions, newTransaction].sort(
+            (a, b) => new Date(a.date) - new Date(b.date)
+          ),
+        };
+
+        // if (type === 'Credit') {
+        //   updates.currentBalance = currentBalance + numAmount;
+        //   updates.monthlyIncome = monthlyIncome + numAmount;
+        // } else {
+        //   updates.currentBalance = currentBalance - numAmount;
+        //   updates.monthlyOutgoing = monthlyOutgoing + numAmount;
+        // }
+
+        set(updates);
+      },
+
+      // Admin: Delete a transaction by ID
+      deleteTransaction: (txId) => {
+        set({
+          transactions: get().transactions.filter((tx) => tx.id !== txId),
+        });
+      },
     }),
     {
       name: 'bank-store',
