@@ -75,7 +75,7 @@ export default function AdminCreateAccount() {
   };
 
   return (
-    <div className="w-full max-w-3xl my-8 mx-auto">
+    <div className="w-full max-w-6xl my-8 mx-auto">
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
@@ -89,16 +89,15 @@ export default function AdminCreateAccount() {
               Set up a new user account with initial balances, limits, and password.
             </p>
           </div>
-          
+
         </div>
 
         {status && (
           <div
-            className={`mb-4 rounded-lg px-4 py-3 text-sm ${
-              status.type === 'success'
-                ? 'bg-green-50 text-green-700 border border-green-200'
-                : 'bg-red-50 text-red-700 border border-red-200'
-            }`}
+            className={`mb-4 rounded-lg px-4 py-3 text-sm ${status.type === 'success'
+              ? 'bg-green-50 text-green-700 border border-green-200'
+              : 'bg-red-50 text-red-700 border border-red-200'
+              }`}
           >
             {status.message}
           </div>
@@ -600,6 +599,7 @@ export default function AdminCreateAccount() {
                   <thead>
                     <tr className="text-text-secondary border-b border-gray-100">
                       <th className="py-2 pr-3 text-left">Date</th>
+                      <th className="py-2 pr-3 text-left">Transaction ID</th>
                       <th className="py-2 pr-3 text-left">Name</th>
                       <th className="py-2 pr-3 text-left">Description</th>
                       <th className="py-2 pr-3 text-left">Channel</th>
@@ -614,6 +614,7 @@ export default function AdminCreateAccount() {
                         className="border-b border-gray-50 last:border-b-0 hover:bg-gray-50"
                       >
                         <td className="py-2 pr-3 text-text-secondary">{tx.date}</td>
+                        <td className="py-2 pr-3 font-mono text-text-secondary">{tx.id}</td>
                         <td className="py-2 pr-3 font-medium text-primary">{tx.name}</td>
                         <td className="py-2 pr-3 text-text-secondary">
                           {tx.description}
@@ -621,19 +622,17 @@ export default function AdminCreateAccount() {
                         <td className="py-2 pr-3 text-text-secondary">{tx.channel}</td>
                         <td className="py-2 pr-3">
                           <span
-                            className={`inline-flex px-2 py-0.5 rounded-full text-[11px] font-semibold ${
-                              tx.type === 'Credit'
-                                ? 'bg-green-50 text-green-600 border border-green-200'
-                                : 'bg-red-50 text-red-500 border border-red-200'
-                            }`}
+                            className={`inline-flex px-2 py-0.5 rounded-full text-[11px] font-semibold ${tx.type === 'Credit'
+                              ? 'bg-green-50 text-green-600 border border-green-200'
+                              : 'bg-red-50 text-red-500 border border-red-200'
+                              }`}
                           >
                             {tx.type}
                           </span>
                         </td>
                         <td
-                          className={`py-2 pl-3 text-right font-semibold ${
-                            tx.type === 'Credit' ? 'text-green-600' : 'text-red-500'
-                          }`}
+                          className={`py-2 pl-3 text-right font-semibold ${tx.type === 'Credit' ? 'text-green-600' : 'text-red-500'
+                            }`}
                         >
                           {formatCurrency(tx.amount)}
                         </td>
