@@ -10,6 +10,14 @@ function formatDate(dateStr) {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
+function formatTime(timeStr) {
+  if (!timeStr) return null;
+  const [h, m] = timeStr.split(':').map(Number);
+  const period = h >= 12 ? 'PM' : 'AM';
+  const hour = h % 12 || 12;
+  return `${hour}:${String(m).padStart(2, '0')} ${period}`;
+}
+
 function formatAmount(amount, type) {
   return `${type === 'Debit' ? '-' : '+'}$${amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
@@ -89,7 +97,12 @@ export default function TransactionHistory({ months: propMonths = months, select
             ) : (
               displayTransactions.map(tx => (
                 <tr key={tx.id} className="border-t last:border-b-0 border-gray-100 hover:bg-gray-50 transition-colors duration-150">
-                  <td className="py-4 px-2 text-gray-600">{formatDate(tx.date)}</td>
+                  <td className="py-4 px-2 text-gray-600">
+                    <div>{formatDate(tx.date)}</div>
+                    {tx.time && (
+                      <div className="text-xs text-gray-400 mt-0.5">{formatTime(tx.time)}</div>
+                    )}
+                  </td>
                   <td className="py-4 px-2 font-mono text-sm text-gray-500">{tx.id}</td>
                   <td className="py-4 px-2 font-medium text-gray-900">{tx.name}</td>
                   <td className="py-4 px-2 text-gray-600">{tx.description}</td>

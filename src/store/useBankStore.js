@@ -85,6 +85,19 @@ const generateRandomId = () => {
   return `${prefix}-${num}`;
 };
 
+// Produces a random HH:MM time string
+const generateRandomTime = () => {
+  const h = String(randomInt(0, 23)).padStart(2, '0');
+  const m = String(randomInt(0, 59)).padStart(2, '0');
+  return `${h}:${m}`;
+};
+
+// Current local time as HH:MM
+const currentTime = () => {
+  const now = new Date();
+  return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+};
+
 const generateRandomName = () => {
   // 40% chance of being a business name, 60% chance of a person name
   if (Math.random() < 0.4) {
@@ -166,6 +179,7 @@ export const generateTransactionsInRange = (
       id: generateRandomId(),
       name: generateRandomName(),
       date: toISODate(txDate),
+      time: generateRandomTime(),
       description: generateDescription(type),
       type,
       amount,
@@ -317,7 +331,8 @@ export const useBankStore = create(
         const newTransaction = {
           id: generateRandomId(),
           name: to,
-          date: new Date().toISOString().split('T')[0], // YYYY-MM-DD
+          date: new Date().toISOString().split('T')[0],
+          time: currentTime(),
           description: description || 'Transfer',
           type: 'Debit',
           amount: numAmount,
@@ -345,6 +360,7 @@ export const useBankStore = create(
           id: generateRandomId(),
           name: from || 'Self',
           date: new Date().toISOString().split('T')[0],
+          time: currentTime(),
           description: description || 'Deposit',
           type: 'Credit',
           amount: numAmount,
@@ -372,6 +388,7 @@ export const useBankStore = create(
           id: generateRandomId(),
           name: name || 'Unknown',
           date: date || new Date().toISOString().split('T')[0],
+          time: generateRandomTime(),
           description: description || (type === 'Credit' ? 'Manual credit' : 'Manual debit'),
           type: type || 'Credit',
           amount: numAmount,
