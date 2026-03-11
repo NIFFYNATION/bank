@@ -12,9 +12,14 @@ function TransactionsPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
   const [dateRange, setDateRange] = useState({ start: '', end: '' });
+  const [visibleCount, setVisibleCount] = useState(10);
+
+  const PAGE_SIZE = 10;
 
   // Filter logic
   const filteredTransactions = useMemo(() => {
+    // Reset visible count whenever filters change
+    setVisibleCount(PAGE_SIZE);
     return transactions.filter(tx => {
       // Search
       const query = searchQuery.toLowerCase();
@@ -35,6 +40,9 @@ function TransactionsPage() {
       return matchesSearch && matchesDate;
     });
   }, [transactions, searchQuery, dateRange]);
+
+  const visibleTransactions = filteredTransactions.slice(0, visibleCount);
+  const hasMore = visibleCount < filteredTransactions.length;
 
   const handleExport = () => {
     const doc = new jsPDF();
@@ -147,8 +155,29 @@ function TransactionsPage() {
         </div>
       </div>
       <TransactionHistory
-        transactions={filteredTransactions}
+        transactions={visibleTransactions}
       />
+
+      {/* Load More / Count indicator */}
+      <div className="flex flex-col items-center gap-3 py-4">
+        <p className="text-sm text-gray-400">
+          Showing {visibleTransactions.length} of {filteredTransactions.length} transactions
+        </p>
+        {hasMore && (
+          <button
+            onClick={() => setVisibleCount(c => c + PAGE_SIZE)}
+            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl border border-gray-200 text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 hover:border-primary transition-colors shadow-sm"
+          >
+            <svg width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path d="M12 5v14M5 12l7 7 7-7" />
+            </svg>
+            Load More
+          </button>
+        )}
+        {!hasMore && filteredTransactions.length > 0 && (
+          <p className="text-xs text-gray-400">All transactions loaded</p>
+        )}
+      </div>
     </div>
   )
 }

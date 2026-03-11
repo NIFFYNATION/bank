@@ -24,13 +24,12 @@ export default function AdminCreateAccount() {
     lastTransactionDate: '',
     transactionTypePreference: '',
     amountRange: '',
-    unitScale: '',
     city: '',
     country: '',
     address: '',
     zipCode: '',
     spendStatus: '',
-    activeStatus: '',
+    accountStatus: '',
     sendOtpToLogin: '',
     accountAgeYears: '',
     password: '',
@@ -194,32 +193,6 @@ export default function AdminCreateAccount() {
               />
             </div>
 
-            <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-              <div className="rounded-xl border border-gray-100 bg-background-alt p-3">
-                <div className="text-[11px] text-text-secondary uppercase tracking-wide">
-                  Monthly Income (auto)
-                </div>
-                <div className="mt-1 text-sm font-semibold text-primary">
-                  {formatCurrency(Number(storeMonthlyIncome || 0))}
-                </div>
-              </div>
-              <div className="rounded-xl border border-gray-100 bg-background-alt p-3">
-                <div className="text-[11px] text-text-secondary uppercase tracking-wide">
-                  Monthly Outgoing (auto)
-                </div>
-                <div className="mt-1 text-sm font-semibold text-primary">
-                  {formatCurrency(Number(storeMonthlyOutgoing || 0))}
-                </div>
-              </div>
-              <div className="rounded-xl border border-gray-100 bg-background-alt p-3">
-                <div className="text-[11px] text-text-secondary uppercase tracking-wide">
-                  Transaction Limit (auto)
-                </div>
-                <div className="mt-1 text-sm font-semibold text-primary">
-                  {formatCurrency(Number(storeTransactionLimit || 0))}
-                </div>
-              </div>
-            </div>
 
             <div>
               <label className="block text-xs font-medium text-text-secondary mb-1">
@@ -332,20 +305,6 @@ export default function AdminCreateAccount() {
               </div>
             </div>
 
-            <div>
-              <label className="block text-xs font-medium text-text-secondary mb-1">
-                Unit / Scale
-              </label>
-              <input
-                type="text"
-                name="unitScale"
-                value={form.unitScale}
-                onChange={handleChange}
-                className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-light"
-                placeholder="e.g. Personal, Corporate"
-                required
-              />
-            </div>
 
             <div>
               <label className="block text-xs font-medium text-text-secondary mb-1">
@@ -424,11 +383,11 @@ export default function AdminCreateAccount() {
 
             <div>
               <label className="block text-xs font-medium text-text-secondary mb-1">
-                Active Status
+                Account Status
               </label>
               <select
-                name="activeStatus"
-                value={form.activeStatus}
+                name="accountStatus"
+                value={form.accountStatus}
                 onChange={handleChange}
                 className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-light"
                 required
@@ -578,12 +537,7 @@ export default function AdminCreateAccount() {
                 {createdAccount.amountRange}
               </div>
             </div>
-            <div>
-              <span className="text-text-secondary">Unit / Scale</span>
-              <div className="font-semibold text-primary">
-                {createdAccount.unitScale}
-              </div>
-            </div>
+
             <div>
               <span className="text-text-secondary">Location</span>
               <div className="font-semibold text-primary">
@@ -603,9 +557,9 @@ export default function AdminCreateAccount() {
               </div>
             </div>
             <div>
-              <span className="text-text-secondary">Active Status</span>
+              <span className="text-text-secondary">Account Status</span>
               <div className="font-semibold text-primary">
-                {createdAccount.activeStatus}
+                {createdAccount.accountStatus}
               </div>
             </div>
             <div>

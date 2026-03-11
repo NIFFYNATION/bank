@@ -143,59 +143,37 @@ export const generateTransactionsInRange = (
     return baseRanges.thousands;
   };
 
-  const transactions = [];
-  let current = new Date(start);
+  // Calculate the total number of days in the range
+  const msInDay = 24 * 60 * 60 * 1000;
+  const totalDays = Math.max(1, Math.floor((end.getTime() - start.getTime()) / msInDay));
 
-  outer: while (current <= end) {
-    const txCountForDay = randomInt(0, 3);
+  // Determine how many transactions to generate.
+  // If no cap, derive a natural density: roughly 1 per 3-5 days.
+  const count = maxTransactions
+    ? Math.max(1, Number(maxTransactions))
+    : Math.max(1, Math.floor(totalDays / randomInt(3, 5)));
 
-    for (let i = 0; i < txCountForDay; i += 1) {
-      const { min, max } = pickAmountRange();
-      const type = pickType();
-      const amount = Number((Math.random() * (max - min) + min).toFixed(2));
-      const name = generateRandomName();
-      const channel = randomPick(CHANNELS);
-      const description = generateDescription(type);
-
-      transactions.push({
-        id: generateRandomId(),
-        name,
-        date: toISODate(current),
-        description,
-        type,
-        amount,
-        channel,
-      });
-
-      if (maxTransactions && transactions.length >= maxTransactions) {
-        break outer;
-      }
-    }
-
-    const stepDays = randomInt(1, 3);
-    current.setDate(current.getDate() + stepDays);
-  }
-
-  if (transactions.length === 0) {
-    const { min, max } = pickAmountRange();
+  // Generate each transaction with a random date uniformly distributed
+  // across the full [start, end] range — this guarantees spread.
+  const transactions = Array.from({ length: count }, () => {
+    const randomDayOffset = randomInt(0, totalDays);
+    const txDate = new Date(start.getTime() + randomDayOffset * msInDay);
     const type = pickType();
+    const { min, max } = pickAmountRange();
     const amount = Number((Math.random() * (max - min) + min).toFixed(2));
-    const name = generateRandomName();
-    const channel = randomPick(CHANNELS);
-    const description = generateDescription(type);
 
-    transactions.push({
+    return {
       id: generateRandomId(),
-      name,
-      date: toISODate(start),
-      description,
+      name: generateRandomName(),
+      date: toISODate(txDate),
+      description: generateDescription(type),
       type,
       amount,
-      channel,
-    });
-  }
+      channel: randomPick(CHANNELS),
+    };
+  });
 
-  return transactions.sort((a, b) => new Date(a.date) - new Date(b.date));
+  return transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
 };
 
 export const useBankStore = create(
@@ -216,7 +194,6 @@ export const useBankStore = create(
       email: '',
       phoneNumber: '',
       numberOfTransactions: 0,
-      unitScale: '',
       city: '',
       country: '',
       address: '',
@@ -246,13 +223,12 @@ export const useBankStore = create(
         lastTransactionDate,
         transactionTypePreference,
         amountRange,
-        unitScale,
         city,
         country,
         address,
         zipCode,
         spendStatus,
-        activeStatus,
+        accountStatus,
         sendOtpToLogin,
         password,
       }) => {
@@ -306,7 +282,6 @@ export const useBankStore = create(
           email: email || '',
           phoneNumber: phoneNumber || '',
           numberOfTransactions: numericTransactions,
-          unitScale: unitScale || '',
           city: city || '',
           country: country || '',
           address: address || '',
@@ -314,7 +289,7 @@ export const useBankStore = create(
           spendStatus: spendStatus || '',
           sendOtpToLogin: sendOtpToLogin || '',
           userPassword: password || '',
-          accountStatus: activeStatus || 'Active',
+          accountStatus: accountStatus || 'Active',
           firstTransactionDate: firstTransactionDate || '',
           lastTransactionDate: lastTransactionDate || '',
           transactionTypePreference: transactionTypePreference || '',

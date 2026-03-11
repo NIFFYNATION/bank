@@ -38,17 +38,9 @@ function ChannelBadge({ channel }) {
 export default function TransactionHistory({ months: propMonths = months, selectedMonth, onMonthChange, transactions: propTransactions, limit }) {
   const { transactions: storeTransactions } = useBankStore();
 
-  // Use passed transactions if available, otherwise use store transactions
   const sourceTransactions = propTransactions || storeTransactions;
 
-  // If transactions are passed via props, we assume they are already filtered by the parent (search/date).
-  // But we still apply month filtering IF selectedMonth is passed AND it is not null, 
-  // though typically if propTransactions is passed, the parent might handle all filtering.
-  // However, specifically for the dashboard widget use case vs full page use case:
-  // - Dashboard: relies on Month dropdown.
-  // - Full Page: relies on Search/DateRange but might still have month dropdown? 
-  // The requirement says "filter by calender", implying a date range or specific date.
-  // Let's assume if propTransactions is passed, we display them as is (sorted).
+
 
   const displayTransactions = useMemo(() => {
     let txs = sourceTransactions;
@@ -70,10 +62,6 @@ export default function TransactionHistory({ months: propMonths = months, select
 
   return (
     <div className="bg-white rounded-2xl shadow p-6">
-      <div className='flex justify-end pb-6'>
-        <Link to='/dashboard/transactionspage' className='bg-primary-light rounded-lg py-3 px-4 text-background' variant="primary" >View All Transactions</Link>
-
-      </div>
       <div className="flex justify-between items-center mb-4">
         <h2 className="font-bold text-lg text-gray-900">{limit ? 'Recent Transactions' : 'Transaction History'}</h2>
         {!limit && onMonthChange && (
@@ -116,6 +104,6 @@ export default function TransactionHistory({ months: propMonths = months, select
           </tbody>
         </table>
       </div>
-    </div>
+    </div >
   );
 }

@@ -13,6 +13,9 @@ export default function LabeledField({
   min,
   max,
   step,
+  disabled,
+  readOnly,
+  ...rest
 }) {
   const common = {
     name,
@@ -20,8 +23,13 @@ export default function LabeledField({
     onChange,
     required,
     placeholder,
-    className:
-      'w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-gray-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500',
+    disabled,
+    readOnly,
+    ...rest,
+    className: `w-full rounded-lg border border-gray-200 px-3 py-2 text-gray-900 shadow-sm focus:outline-none ${disabled || readOnly
+        ? 'bg-gray-50 cursor-not-allowed text-gray-500'
+        : 'bg-white focus:ring-2 focus:ring-primary focus:border-primary'
+      }`,
   };
 
   return (
