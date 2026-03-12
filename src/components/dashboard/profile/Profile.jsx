@@ -8,10 +8,10 @@ const Profile = () => {
     const store = useBankStore();
 
     const user = {
-        name: store.userName || 'Unknown User',
+        name: `${store.firstName || ''} ${store.lastName || ''}`.trim() || 'Unknown User',
         email: store.email || 'No email provided',
         phone: store.phoneNumber || 'No phone provided',
-        address: `${store.address || ''}, ${store.city || ''}, ${store.zipCode || ''}, ${store.country || ''}`.replace(/^[,\s]+|[,\s]+$/g, ''),
+        address: [store.address, store.city, store.zipCode, store.country].filter(Boolean).join(', ') || 'No address provided',
         id: store.accountNumber || 'N/A',
         status: store.accountStatus || 'Pending',
         spendStatus: store.spendStatus || 'Standard',
@@ -24,14 +24,18 @@ const Profile = () => {
     };
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 mt-10">
             <div className="flex flex-col md:flex-row gap-6 items-start">
                 {/* Profile Summary Card */}
                 <div className="w-full md:w-1/3">
                     <SectionCard>
                         <div className="flex flex-col items-center text-center">
-                            <div className="w-24 h-24 bg-primary-light rounded-full flex items-center justify-center text-white text-3xl font-bold mb-4">
-                                {user.name.charAt(0).toUpperCase()}
+                            <div className="w-24 h-24 bg-primary-light rounded-full flex items-center justify-center text-white text-3xl font-bold mb-4 overflow-hidden">
+                                {store.avatar ? (
+                                    <img src={store.avatar} alt="Profile" className="w-full h-full object-cover" />
+                                ) : (
+                                    user.name.charAt(0).toUpperCase()
+                                )}
                             </div>
                             <h2 className="text-xl font-bold text-text-primary">{user.name}</h2>
                             <p className="text-text-secondary text-sm mb-4">{user.email}</p>
@@ -56,7 +60,9 @@ const Profile = () => {
                             </div>
                             <div className="flex justify-between py-2 text-sm">
                                 <span className="text-text-secondary">KYC Status</span>
-                                <span className="text-success font-medium">Verified</span>
+                                <span className={`font-medium ${store.kyc ? 'text-success' : 'text-warning'}`}>
+                                    {store.kyc ? 'Verified' : 'Pending'}
+                                </span>
                             </div>
                         </div>
                     </SectionCard>

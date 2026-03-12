@@ -219,6 +219,8 @@ export const useBankStore = create(
       transactionTypePreference: '',
       amountRange: '',
       currency: 'USD',
+      kyc: true,
+      avatar: '',
       transactions: [],
       cards: [],
 

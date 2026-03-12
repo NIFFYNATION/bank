@@ -34,17 +34,11 @@ const Cards = () => {
 
   return (
     <div className="p-2 space-y-8">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-text-primary">My Cards</h1>
 
-        {/* <Button variant='primary' size='md' shape='roundedMd' >
-              <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                <path d="M12 5v14M5 12h14" />
-              </svg>
-                         Add New Card
+      <h1 className="text-2xl mt-4 font-bold text-text-primary">My Cards</h1>
 
-            </Button> */}
-      </div>
+
+
 
       {/* Card Statistics Summary */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
@@ -52,7 +46,7 @@ const Cards = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-500">Total Balance</p>
-              <p className="text-2xl font-bold text-text-primary mt-1">
+              <p className="text-xl md:text-2xl font-bold text-text-primary mt-1">
                 ${(cards || []).reduce((sum, card) => sum + (card.balance || 0), 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
               </p>
             </div>
@@ -65,7 +59,7 @@ const Cards = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-500">Active Cards</p>
-              <p className="text-2xl font-bold text-text-primary mt-1">{cards.length}</p>
+              <p className="text-xl md:text-2xl font-bold text-text-primary mt-1">{cards.length}</p>
             </div>
             <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
               <CreditCardIcon className="h-6 w-6 text-green-600" />
@@ -76,7 +70,7 @@ const Cards = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-500">Monthly Spending</p>
-              <p className="text-2xl font-bold text-text-primary mt-1">${(monthlyOutgoing || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
+              <p className="text-xl md:text-2xl font-bold text-text-primary mt-1">${(monthlyOutgoing || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</p>
             </div>
             <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
               <ChartBarIcon className="h-6 w-6 text-blue-600" />
@@ -159,27 +153,27 @@ const Cards = () => {
       {/* Card Details */}
       {cards.length > 0 && (
         <div className="bg-white rounded-2xl p-6 shadow-lg">
-          <div className="flex justify-between items-center mb-6">
-            <div>
-              <h2 className="text-xl font-semibold text-text-primary">Card Balance</h2>
-              <p className="text-3xl font-bold text-indigo-600 mt-2">
+          <div className="flex flex-col md:flex-row justify-between  mb-6">
+            <div className="flex  justify-between items-center gap-4 mb-3">
+              <h2 className="text-xl font-semibold text-text-primary">Card Balance:</h2>
+              <p className="text-2xl  font-bold text-primary">
                 ${cards[activeCard]?.balance.toLocaleString() || '0.00'}
               </p>
             </div>
-            <div className="space-x-3">
-              <button className="px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+            <div className="flex gap-4 justify-between items-center">
+              <Button variant='outline' size='md' shape='roundedMd'>
                 Block Card
-              </button>
-              <button className="px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+              </Button>
+              <Button variant='primary' size='md' shape='roundedMd'>
                 Card Settings
-              </button>
+              </Button>
             </div>
           </div>
 
           {/* Card Features */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
             {cardFeatures.map((feature, index) => (
-              <div key={index} className="p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer">
+              <div key={index} className="p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer">
                 <span className="text-2xl">{feature.icon}</span>
                 <h3 className="font-semibold text-text-primary mt-2">{feature.title}</h3>
                 <p className="text-sm text-gray-500 mt-1">{feature.description}</p>
@@ -192,13 +186,13 @@ const Cards = () => {
       {/* Recent Transactions */}
       <div className="bg-white rounded-2xl p-2 shadow-lg">
         <h2 className="text-xl font-semibold text-text-primary mb- p-4">Recent Card Transactions</h2>
-        <div className="space-y-4">
+        <div className="">
           {transactions.filter(tx => tx.channel === 'Card').slice(0, 8).length > 0 ? (
             transactions
               .filter(tx => tx.channel === 'Card')
               .slice(0, 8)
               .map(tx => (
-                <div key={tx.id} className="p-2 hover:bg-gray-50 rounded-lg border border-transparent hover:border-gray-100 transition-all">
+                <div key={tx.id} className=" p-2 py-4 border-t last:border-b-0 border-gray-100 hover:bg-gray-50 transition-colors duration-150">
                   <div className="flex items-center gap-4">
                     <div className="w-10 h-10 sm:w-12 sm:h-11 bg-gray-100 rounded-full flex items-center justify-center text-lg">
                       {tx.type === 'Debit' ? '🛍️' : '📥'}
