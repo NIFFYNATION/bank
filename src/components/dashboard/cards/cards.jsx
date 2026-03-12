@@ -33,7 +33,7 @@ const Cards = () => {
   };
 
   return (
-    <div className="p-6 s ace-y-8">
+    <div className="p-2 space-y-8">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-text-primary">My Cards</h1>
 
@@ -190,27 +190,30 @@ const Cards = () => {
       )}
 
       {/* Recent Transactions */}
-      <div className="bg-white rounded-2xl p-6 shadow-lg">
-        <h2 className="text-xl font-semibold text-text-primary mb-4">Recent Card Transactions</h2>
+      <div className="bg-white rounded-2xl p-2 shadow-lg">
+        <h2 className="text-xl font-semibold text-text-primary mb- p-4">Recent Card Transactions</h2>
         <div className="space-y-4">
           {transactions.filter(tx => tx.channel === 'Card').slice(0, 8).length > 0 ? (
             transactions
               .filter(tx => tx.channel === 'Card')
               .slice(0, 8)
               .map(tx => (
-                <div key={tx.id} className="flex justify-between items-center p-4 hover:bg-gray-50 rounded-lg border border-transparent hover:border-gray-100 transition-all">
+                <div key={tx.id} className="p-2 hover:bg-gray-50 rounded-lg border border-transparent hover:border-gray-100 transition-all">
                   <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-lg">
+                    <div className="w-10 h-10 sm:w-12 sm:h-11 bg-gray-100 rounded-full flex items-center justify-center text-lg">
                       {tx.type === 'Debit' ? '🛍️' : '📥'}
                     </div>
-                    <div>
-                      <p className="font-medium text-text-primary truncate max-w-[200px]">{tx.description || tx.name}</p>
-                      <p className="text-sm text-gray-500">{new Date(tx.date).toLocaleDateString()}</p>
+                    <div className='flex flex-col md:flex-row w-full justify-between '>
+                      <div className=" ">
+                        <p className="font-medium text-text-primary truncate md:whitespace-normal max-w-[300px]">{tx.description || tx.name}</p>
+                        <p className="text-sm text-gray-500">{new Date(tx.date).toLocaleDateString()}</p>
+                      </div>
+                      <p className={`mt-2 sm:mt-0 font-semibold ${tx.type === 'Debit' ? 'text-red-500' : 'text-green-600'}`}>
+                        {tx.type === 'Debit' ? '-' : '+'}${tx.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                      </p>
                     </div>
                   </div>
-                  <p className={`font-semibold ${tx.type === 'Debit' ? 'text-red-500' : 'text-green-600'}`}>
-                    {tx.type === 'Debit' ? '-' : '+'}${tx.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-                  </p>
+
                 </div>
               ))
           ) : (

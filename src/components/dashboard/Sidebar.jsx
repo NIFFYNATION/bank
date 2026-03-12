@@ -92,7 +92,7 @@ function Sidebar() {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
+      setIsMobile(window.innerWidth < 890);
     };
     handleResize();
     window.addEventListener('resize', handleResize);
