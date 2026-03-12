@@ -70,6 +70,10 @@ export default function TransactionHistory({ months: propMonths = months, select
 
   return (
     <div className="bg-white rounded-2xl shadow p-6">
+      <div className='flex justify-end pb-6'>
+        <Link to='/dashboard/transactionspage' className='bg-primary-light rounded-lg py-3 px-4 text-background' variant="primary" >View All Transactions</Link>
+
+      </div>
       <div className="flex justify-between items-center mb-4">
         <h2 className="font-bold text-lg text-gray-900">{limit ? 'Recent Transactions' : 'Transaction History'}</h2>
         {!limit && onMonthChange && (

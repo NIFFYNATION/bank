@@ -4,7 +4,7 @@ import TransactionHistory from './TransactionHistory'
 import DashboardSummaryCards from '../welcomeCard/DashboardSummaryCards';
 import { useBankStore } from '../../../store/useBankStore';
 import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
 
 // ── helpers ───────────────────────────────────────────────────────────────
 const fmtDate = (d) =>
@@ -19,7 +19,15 @@ const fmtTime = (t) => {
 
 // ── Export Modal ───────────────────────────────────────────────────────────
 function ExportModal({ transactions, store, onClose }) {
-  const [exportRange, setExportRange] = useState({ start: '', end: '' });
+  // Pre-fill dates so the user can just click "Download" for everything
+  const sortedByDate = useMemo(() => {
+    return [...transactions].sort((a, b) => new Date(a.date) - new Date(b.date));
+  }, [transactions]);
+
+  const initialStart = sortedByDate.length > 0 ? sortedByDate[0].date : '';
+  const initialEnd = sortedByDate.length > 0 ? sortedByDate[sortedByDate.length - 1].date : '';
+
+  const [exportRange, setExportRange] = useState({ start: initialStart, end: initialEnd });
   const [error, setError] = useState('');
 
   const preview = useMemo(() => {
@@ -151,7 +159,7 @@ function ExportModal({ transactions, store, onClose }) {
 
     // ── Transactions table ──
     doc.setTextColor(40, 40, 40);
-    doc.autoTable({
+    autoTable(doc, {
       head: [['Date', 'Time', 'Ref ID', 'Description', 'Name / Party', 'Channel', 'Debit (DR)', 'Credit (CR)', 'Balance']],
       body: previewWithBalance.map(tx => [
         tx.date,
@@ -175,20 +183,14 @@ function ExportModal({ transactions, store, onClose }) {
         3: { cellWidth: 34 },
         4: { cellWidth: 28 },
         5: { cellWidth: 20 },
-        6: { cellWidth: 18, halign: 'right', textColor: [220, 38, 38] },
-        7: { cellWidth: 18, halign: 'right', textColor: [22, 163, 74] },
+        6: { cellWidth: 18, halign: 'right', textColor: [220, 38, 38], headStyles: { textColor: 255 } },
+        7: { cellWidth: 18, halign: 'right', textColor: [22, 163, 74], headStyles: { textColor: 255 } },
         8: { cellWidth: 18, halign: 'right', fontStyle: 'bold' },
-      },
-      didParseCell(data) {
-        // colour DR/CR columns header
-        if (data.section === 'head' && (data.column.index === 6 || data.column.index === 7)) {
-          data.cell.styles.textColor = 255;
-        }
       },
     });
 
     // ── Footer ──
-    const finalY = doc.lastAutoTable.finalY + 6;
+    const finalY = (doc.lastAutoTable ? doc.lastAutoTable.finalY : summaryY + 28) + 6;
     doc.setFontSize(7);
     doc.setTextColor(160, 160, 160);
     doc.setFont('helvetica', 'normal');
@@ -449,7 +451,7 @@ function TransactionsPage() {
             </div>
             <h1 className="text-2xl font-bold text-gray-900">Transactions</h1>
           </div>
-          <div className="flex gap-2 mt-2 sm:mt-0">
+          <div className="flex justify-between gap-2 mt-2 sm:mt-0">
             <Button variant='outline' size='md' shape='roundedMd' onClick={() => setShowFilters(!showFilters)}>
               <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                 <path d="M4 6h16M4 12h16M4 18h16" />

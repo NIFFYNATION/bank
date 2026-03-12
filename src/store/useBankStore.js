@@ -220,6 +220,7 @@ export const useBankStore = create(
       amountRange: '',
       currency: 'USD',
       transactions: [],
+      cards: [],
 
       // --- Actions ---
 
@@ -279,6 +280,34 @@ export const useBankStore = create(
           .filter((tx) => tx.type === 'Debit')
           .reduce((sum, tx) => sum + Number(tx.amount || 0), 0);
 
+        // Generate Cards dynamically based on the user's name
+        const holderName = `${firstName || ''} ${lastName || ''}`.trim() || 'Valued Customer';
+        const expiryYear = new Date().getFullYear() + 3;
+        const expiryMonth = String(new Date().getMonth() + 1).padStart(2, '0');
+
+        const generatedCards = [
+          {
+            id: 1,
+            type: 'Visa Platinum',
+            number: `**** **** **** ${String(Math.floor(Math.random() * 9000) + 1000)}`,
+            holder: holderName,
+            expires: `${expiryMonth}/${String(expiryYear).slice(2)}`,
+            balance: numericBalance,
+            color: 'from-purple-500 to-indigo-600',
+            logo: '/icons/cards.svg'
+          },
+          {
+            id: 2,
+            type: 'Mastercard Gold',
+            number: `**** **** **** ${String(Math.floor(Math.random() * 9000) + 1000)}`,
+            holder: holderName,
+            expires: `${String((new Date().getMonth() + 4) % 12 || 12).padStart(2, '0')}/${String(expiryYear + 1).slice(2)}`,
+            balance: numericBalance * 0.4, // Second card gets a portion of the balance for realism
+            color: 'from-amber-500 to-orange-600',
+            logo: '/icons/cards.svg'
+          }
+        ];
+
         const transactionLimit = numericBalance * 0.4;
 
         set({
@@ -309,6 +338,7 @@ export const useBankStore = create(
           transactionTypePreference: transactionTypePreference || '',
           amountRange: amountRange || '',
           transactions: generatedTransactions,
+          cards: generatedCards,
         });
       },
 
